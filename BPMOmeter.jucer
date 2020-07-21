@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="htG75V" name="BPMOmeter" projectType="audioplug" jucerVersion="5.4.7"
+              defines="USE_KISS_FFT">
+  <MAINGROUP id="cSPnam" name="BPMOmeter">
+    <GROUP id="{5CBD5090-27A2-296D-4841-AC80F5F7A2BF}" name="Source">
+      <GROUP id="{50ED461A-5B7E-ADB8-413C-1304AD191BB7}" name="kiss_fft130">
+        <FILE id="z1u5Mp" name="_kiss_fft_guts.h" compile="0" resource="0"
+              file="../Libraries/kiss_fft130/_kiss_fft_guts.h"/>
+        <FILE id="e4DEJN" name="COPYING" compile="0" resource="1" file="../Libraries/kiss_fft130/COPYING"/>
+        <FILE id="njUrNJ" name="kiss_fft.c" compile="1" resource="0" file="../Libraries/kiss_fft130/kiss_fft.c"/>
+        <FILE id="Qs25Xr" name="kiss_fft.h" compile="0" resource="0" file="../Libraries/kiss_fft130/kiss_fft.h"/>
+        <FILE id="oil6hk" name="kissfft.hh" compile="0" resource="0" file="../Libraries/kiss_fft130/kissfft.hh"/>
+        <FILE id="H2oAbw" name="README" compile="0" resource="1" file="../Libraries/kiss_fft130/README"/>
+      </GROUP>
+      <GROUP id="{18B29CDE-6534-252F-F668-5AACE1132504}" name="libsamplerate-0.1.9">
+        <GROUP id="{468A322D-921B-12A4-46BF-0CBCA30E6475}" name="Cfg">
+          <FILE id="ii9zvi" name="compile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/compile"/>
+          <FILE id="tXvyMq" name="config.guess" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/config.guess"/>
+          <FILE id="FiV3Yz" name="config.sub" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/config.sub"/>
+          <FILE id="B9BgSE" name="depcomp" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/depcomp"/>
+          <FILE id="n6JWq2" name="install-sh" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/install-sh"/>
+          <FILE id="MSF568" name="ltmain.sh" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/ltmain.sh"/>
+          <FILE id="zPlBIw" name="missing" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Cfg/missing"/>
+        </GROUP>
+        <GROUP id="{93BBD849-DE97-C26E-37DE-E3CA8681B3AE}" name="doc">
+          <FILE id="jchzya" name="api.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/api.html"/>
+          <FILE id="b3Nckb" name="api_callback.html" compile="0" resource="1"
+                file="../Libraries/libsamplerate-0.1.9/doc/api_callback.html"/>
+          <FILE id="shxmG5" name="api_full.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/api_full.html"/>
+          <FILE id="yUAYxn" name="api_misc.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/api_misc.html"/>
+          <FILE id="Xt6ERh" name="api_simple.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/api_simple.html"/>
+          <FILE id="kssge7" name="ChangeLog" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/ChangeLog"/>
+          <FILE id="EBABgs" name="download.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/download.html"/>
+          <FILE id="qUrrwe" name="faq.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/faq.html"/>
+          <FILE id="zYDBl9" name="history.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/history.html"/>
+          <FILE id="AQWBxu" name="index.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/index.html"/>
+          <FILE id="kSb9Lq" name="license.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/license.html"/>
+          <FILE id="su16aY" name="lists.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/lists.html"/>
+          <FILE id="C4EH65" name="Makefile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/Makefile"/>
+          <FILE id="VDfNpB" name="Makefile.am" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/Makefile.am"/>
+          <FILE id="s9BN3I" name="Makefile.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/Makefile.in"/>
+          <FILE id="H7dOmw" name="NEWS" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/NEWS"/>
+          <FILE id="af0Qg9" name="quality.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/quality.html"/>
+          <FILE id="jXXjtl" name="SRC.css" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/SRC.css"/>
+          <FILE id="cwg5ZJ" name="SRC.png" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/SRC.png"/>
+          <FILE id="SQnj44" name="win32.html" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/doc/win32.html"/>
+        </GROUP>
+        <GROUP id="{4295B69A-363B-CAB1-B740-40E404E080FC}" name="M4">
+          <FILE id="O6idFX" name="add_cflags.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/add_cflags.m4"/>
+          <FILE id="QeZmgq" name="check_signal.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/check_signal.m4"/>
+          <FILE id="nkie1v" name="clip_mode.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/clip_mode.m4"/>
+          <FILE id="dgebjF" name="endian.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/endian.m4"/>
+          <FILE id="Q2Rwg2" name="libtool.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/libtool.m4"/>
+          <FILE id="CRwG5n" name="lrint.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/lrint.m4"/>
+          <FILE id="OjQrzT" name="lrintf.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/lrintf.m4"/>
+          <FILE id="onBgZ7" name="lt~obsolete.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/lt~obsolete.m4"/>
+          <FILE id="PfVlg6" name="ltoptions.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/ltoptions.m4"/>
+          <FILE id="RhrBxL" name="ltsugar.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/ltsugar.m4"/>
+          <FILE id="zCSYE4" name="ltversion.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/ltversion.m4"/>
+          <FILE id="EB3DEn" name="Makefile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/Makefile"/>
+          <FILE id="ZmvVFA" name="Makefile.am" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/Makefile.am"/>
+          <FILE id="eHftmb" name="Makefile.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/M4/Makefile.in"/>
+        </GROUP>
+        <GROUP id="{5C17F720-B6A4-02E6-B6F0-E501198A43BA}" name="src">
+          <FILE id="WsKMJv" name="check_asm.sh" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/check_asm.sh"/>
+          <FILE id="Gf06OC" name="common.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/src/common.h"/>
+          <FILE id="AOAuWF" name="config.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/src/config.h"/>
+          <FILE id="ffxDDq" name="config.h.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/config.h.in"/>
+          <FILE id="kWaXvj" name="fastest_coeffs.h" compile="0" resource="0"
+                file="../Libraries/libsamplerate-0.1.9/src/fastest_coeffs.h"/>
+          <FILE id="a8HVo6" name="float_cast.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/src/float_cast.h"/>
+          <FILE id="bnE0sl" name="high_qual_coeffs.h" compile="0" resource="0"
+                file="../Libraries/libsamplerate-0.1.9/src/high_qual_coeffs.h"/>
+          <FILE id="PUwxDG" name="libsamplerate.la" compile="0" resource="1"
+                file="../Libraries/libsamplerate-0.1.9/src/libsamplerate.la"/>
+          <FILE id="aLXrYM" name="Makefile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/Makefile"/>
+          <FILE id="MNcHOu" name="Makefile.am" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/Makefile.am"/>
+          <FILE id="XkweM3" name="Makefile.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/Makefile.in"/>
+          <FILE id="RzSL8x" name="mid_qual_coeffs.h" compile="0" resource="0"
+                file="../Libraries/libsamplerate-0.1.9/src/mid_qual_coeffs.h"/>
+          <FILE id="Y7WybK" name="samplerate.c" compile="1" resource="0" file="../Libraries/libsamplerate-0.1.9/src/samplerate.c"/>
+          <FILE id="srD1TY" name="samplerate.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/src/samplerate.h"/>
+          <FILE id="KRUb9o" name="samplerate.lo" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/samplerate.lo"/>
+          <FILE id="xAzgKJ" name="src_linear.c" compile="1" resource="0" file="../Libraries/libsamplerate-0.1.9/src/src_linear.c"/>
+          <FILE id="t8Wuxm" name="src_linear.lo" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/src_linear.lo"/>
+          <FILE id="g3qK2u" name="src_sinc.c" compile="1" resource="0" file="../Libraries/libsamplerate-0.1.9/src/src_sinc.c"/>
+          <FILE id="rnHmKE" name="src_sinc.lo" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/src_sinc.lo"/>
+          <FILE id="GnBIdX" name="src_zoh.c" compile="1" resource="0" file="../Libraries/libsamplerate-0.1.9/src/src_zoh.c"/>
+          <FILE id="TzTOAb" name="src_zoh.lo" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/src_zoh.lo"/>
+          <FILE id="cr0oZ6" name="stamp-h1" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/stamp-h1"/>
+          <FILE id="zfo0NW" name="Version_script" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/src/Version_script"/>
+          <FILE id="k5MgeO" name="Version_script.in" compile="0" resource="1"
+                file="../Libraries/libsamplerate-0.1.9/src/Version_script.in"/>
+        </GROUP>
+        <GROUP id="{1272BB1F-594F-F745-A6CC-7EB2ED244090}" name="Win32">
+          <FILE id="qLyHYr" name="config.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/Win32/config.h"/>
+          <FILE id="JrNui4" name="libsamplerate-0.def" compile="0" resource="1"
+                file="../Libraries/libsamplerate-0.1.9/Win32/libsamplerate-0.def"/>
+          <FILE id="PP5mr7" name="Makefile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Win32/Makefile"/>
+          <FILE id="gPpZN7" name="Makefile.am" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Win32/Makefile.am"/>
+          <FILE id="fCOWk1" name="Makefile.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Win32/Makefile.in"/>
+          <FILE id="cyV0Pz" name="Makefile.mingw" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Win32/Makefile.mingw"/>
+          <FILE id="Dtn1yD" name="Makefile.mingw.in" compile="0" resource="1"
+                file="../Libraries/libsamplerate-0.1.9/Win32/Makefile.mingw.in"/>
+          <FILE id="hdTRtl" name="Makefile.msvc" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Win32/Makefile.msvc"/>
+          <FILE id="DfS3rN" name="unistd.h" compile="0" resource="0" file="../Libraries/libsamplerate-0.1.9/Win32/unistd.h"/>
+        </GROUP>
+        <FILE id="p1rgF6" name="aclocal.m4" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/aclocal.m4"/>
+        <FILE id="QA3EPn" name="AUTHORS" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/AUTHORS"/>
+        <FILE id="MVRigY" name="autogen.sh" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/autogen.sh"/>
+        <FILE id="H4EIKR" name="ChangeLog" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/ChangeLog"/>
+        <FILE id="WXBlYb" name="config.log" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/config.log"/>
+        <FILE id="qvwNb7" name="config.status" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/config.status"/>
+        <FILE id="Dg599p" name="configure" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/configure"/>
+        <FILE id="GwduaT" name="configure.ac" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/configure.ac"/>
+        <FILE id="CNW8rm" name="COPYING" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/COPYING"/>
+        <FILE id="LvD5Q6" name="INSTALL" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/INSTALL"/>
+        <FILE id="D2jCgi" name="libsamplerate.spec" compile="0" resource="1"
+              file="../Libraries/libsamplerate-0.1.9/libsamplerate.spec"/>
+        <FILE id="BgtcAM" name="libsamplerate.spec.in" compile="0" resource="1"
+              file="../Libraries/libsamplerate-0.1.9/libsamplerate.spec.in"/>
+        <FILE id="ilwIwg" name="libtool" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/libtool"/>
+        <FILE id="zLdSMz" name="Make.bat" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Make.bat"/>
+        <FILE id="p32Qin" name="Makefile" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Makefile"/>
+        <FILE id="gVMcU1" name="Makefile.am" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Makefile.am"/>
+        <FILE id="bmqlD2" name="Makefile.in" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/Makefile.in"/>
+        <FILE id="m91gXf" name="NEWS" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/NEWS"/>
+        <FILE id="sIwCsG" name="README" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/README"/>
+        <FILE id="T48mH4" name="samplerate.pc" compile="0" resource="1" file="../Libraries/libsamplerate-0.1.9/samplerate.pc"/>
+        <FILE id="Lj5zWt" name="samplerate.pc.in" compile="0" resource="1"
+              file="../Libraries/libsamplerate-0.1.9/samplerate.pc.in"/>
+      </GROUP>
+      <FILE id="ScUP5T" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="Ye2KGp" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="Cs7t1m" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="SoxLNl" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="E4JOGH" name="BTrack.cpp" compile="1" resource="0" file="Source/BTrack.cpp"/>
+      <FILE id="A7Szb1" name="BTrack.h" compile="0" resource="0" file="Source/BTrack.h"/>
+      <FILE id="oFNVvl" name="OnsetDetectionFunction.cpp" compile="1" resource="0"
+            file="Source/OnsetDetectionFunction.cpp"/>
+      <FILE id="vQ5Zgg" name="OnsetDetectionFunction.h" compile="0" resource="0"
+            file="Source/OnsetDetectionFunction.h"/>
+      <FILE id="lHmpYh" name="CircularBuffer.h" compile="0" resource="0"
+            file="Source/CircularBuffer.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="/Users/martintownley/Development/Libraries/kiss_fft130&#10;&#10;/Users/martintownley/Development/Libraries/libsamplerate-0.1.9/src"/>
+        <CONFIGURATION isDebug="0" name="Release" headerPath="/Users/martintownley/Development/Libraries/kiss_fft130&#10;&#10;/Users/martintownley/Development/Libraries/libsamplerate-0.1.9/src"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+</JUCERPROJECT>
