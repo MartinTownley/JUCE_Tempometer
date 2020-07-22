@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "MeterComponent.h"
 
 //==============================================================================
 /**
@@ -32,6 +33,11 @@ public:
     void timerCallback() override;
 
 private:
+    
+    TabbedComponent myTabs;
+    
+    MeterComponent meterComp;
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     float _theTempo;

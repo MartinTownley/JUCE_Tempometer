@@ -173,7 +173,7 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             beatCount ++;
             
             calculateInterval( frameCount );
-            DBG ( beatInterval );
+            //DBG ( beatInterval );
             
         }
         

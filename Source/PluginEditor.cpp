@@ -13,11 +13,17 @@
 
 //==============================================================================
 BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor (&p),
+        processor (p),
+        myTabs(TabbedButtonBar::TabsAtTop)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    
+    addAndMakeVisible(myTabs);
+    
+    myTabs.addTab("Meter", Colours::orange,
+                  &meterComp, false);
+    
+    setSize (800, 600);
     
     Timer::startTimerHz(60);
 }
@@ -43,8 +49,7 @@ void BpmometerAudioProcessorEditor::paint (Graphics& g)
 
 void BpmometerAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    myTabs.setBounds( getLocalBounds() );
 }
 
 void BpmometerAudioProcessorEditor::timerCallback()
