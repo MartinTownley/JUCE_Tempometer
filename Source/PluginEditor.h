@@ -27,7 +27,7 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
-    void setTheTempo(float value);
+    
     
     void timerCallback() override;
 

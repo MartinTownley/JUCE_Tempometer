@@ -172,7 +172,9 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         {
             beatCount ++;
             
-            DBG("Beat: " << frameCount);
+            calculateInterval( frameCount );
+            DBG ( beatInterval );
+            
         }
         
         frameCount ++;
@@ -180,20 +182,22 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     }
 }
 
-void BpmometerAudioProcessor::calculateBPM (long frame)
+void BpmometerAudioProcessor::calculateInterval (long frame)
 {
     //Timestamp of the current beat:
     float currentBeatTime = (float) tracker.getBeatTimeInSeconds(frame, myHop, sr);
     
     // Calculate difference in time between beats:
-    float beatInterval = (currentBeatTime - previousBeatTime);
+    beatInterval = (currentBeatTime - previousBeatTime);
     
-    // Calculate tempo:
-    theTempo = 60.0f / beatInterval;
-    
-    // Update beat time to the current beat time:
     previousBeatTime = currentBeatTime;
     
+}
+
+void BpmometerAudioProcessor::calculateTempo ()
+{
+    // Divide 60 by the interval to get BPM:
+    theTempo = 60.0f / beatInterval;
     
 }
 

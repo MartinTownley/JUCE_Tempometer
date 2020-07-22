@@ -33,8 +33,10 @@ public:
 
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
     
-    void calculateBPM (long frame);
     
+    void calculateTempo ();
+    
+    // Getter function
     float getTheTempo() {
         return theTempo;
     }
@@ -61,12 +63,12 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
-    //void calculateBPM (
 
     
                        
 private:
+    
+    void calculateInterval (long frame);
     
     int beatCount;
     
@@ -77,6 +79,8 @@ private:
     long frameCount;
     
     float previousBeatTime;
+    
+    float beatInterval;
     
     float theTempo;
     

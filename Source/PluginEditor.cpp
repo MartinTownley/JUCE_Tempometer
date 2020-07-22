@@ -36,7 +36,7 @@ void BpmometerAudioProcessorEditor::paint (Graphics& g)
     g.setColour (Colours::white);
     g.setFont (15.0f);
     
-    std::string tempoString = std::to_string(  _theTempo );
+    std::string tempoString = std::to_string(  processor.getTheTempo() );
     
     g.drawFittedText (tempoString, getLocalBounds(), Justification::centred, 1);
 }
@@ -47,13 +47,8 @@ void BpmometerAudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
-void BpmometerAudioProcessorEditor::setTheTempo(float value)
-{
-    _theTempo = value;
-    
-}
-
 void BpmometerAudioProcessorEditor::timerCallback()
 {
+    processor.calculateTempo();
     repaint();
 }

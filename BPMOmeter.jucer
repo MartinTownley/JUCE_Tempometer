@@ -146,6 +146,10 @@
             file="Source/OnsetDetectionFunction.h"/>
       <FILE id="lHmpYh" name="CircularBuffer.h" compile="0" resource="0"
             file="Source/CircularBuffer.h"/>
+      <FILE id="TuJh2j" name="MeterComponent.cpp" compile="1" resource="0"
+            file="Source/MeterComponent.cpp"/>
+      <FILE id="aQsJJ4" name="MeterComponent.h" compile="0" resource="0"
+            file="Source/MeterComponent.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
