@@ -31,8 +31,14 @@ public:
     
     
     void timerCallback() override;
+    
+    void calculateInterval();
+    
+    void updateInterval();
 
 private:
+    
+    
     
     TabbedComponent myTabs;
     
@@ -40,7 +46,11 @@ private:
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    float _theTempo;
+    float theTempo;
+    
+    double beatInterval;
+    
+    double previousBeatTime;
     
     BpmometerAudioProcessor& processor;
 

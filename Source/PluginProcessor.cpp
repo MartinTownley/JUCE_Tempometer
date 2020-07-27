@@ -103,7 +103,7 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     frameCount = 0;
     
-    previousBeatTime = 0;
+    //previousBeatTime = 0;
 }
 
 void BpmometerAudioProcessor::releaseResources()
@@ -170,35 +170,56 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         
         if (tracker.beatDueInCurrentFrame() == true)
         {
-            beatCount ++;
-            
-            calculateInterval( frameCount );
+            //calculateInterval( frameCount );
             //DBG ( beatInterval );
+            //DBG (tracker.getBeatPeriod() );
             
+            //calculateInterval( frameCount );
+            
+            updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
+                                                          myHop,
+                                                          sr ) );
+            
+            //timeGrab = tracker.getBeatTimeInSeconds (frameCount, myHop, 44100);
+            
+            
+            
+            beatCount ++;
         }
-        
         frameCount ++;
         
     }
 }
 
-void BpmometerAudioProcessor::calculateInterval (long frame)
+void BpmometerAudioProcessor::updateBeatTime(double _value)
 {
-    //Timestamp of the current beat:
-    float currentBeatTime = (float) tracker.getBeatTimeInSeconds(frame, myHop, sr);
-    
-    // Calculate difference in time between beats:
-    beatInterval = (currentBeatTime - previousBeatTime);
-    
-    previousBeatTime = currentBeatTime;
+    //This called in processBlock, getsBeatTimein Seconds and returns it here.
+    timeGrab = _value;
     
 }
 
-void BpmometerAudioProcessor::calculateTempo ()
+//void BpmometerAudioProcessor::calculateInterval (long frame)
+//{
+//    //Timestamp of the current beat:
+//    float currentBeatTime = (float) tracker.getBeatTimeInSeconds(frame, myHop, sr);
+//
+//    // Calculate difference in time between beats:
+//    beatInterval = (currentBeatTime - previousBeatTime);
+//
+//    previousBeatTime = currentBeatTime;
+//
+//}
+
+//void BpmometerAudioProcessor::calculateTempo ()
+//{
+//    // Divide 60 by the interval to get BPM:
+//    theTempo = 60.0f / beatInterval;
+//
+//}
+
+double BpmometerAudioProcessor::getTimeGrab()
 {
-    // Divide 60 by the interval to get BPM:
-    theTempo = 60.0f / beatInterval;
-    
+    return timeGrab;
 }
 
 //==============================================================================

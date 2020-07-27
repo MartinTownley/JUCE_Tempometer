@@ -64,11 +64,14 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //std::vector<double> getTimez() {return timez;}
+    
+    double getTimeGrab();
     
                        
 private:
     
-    void calculateInterval (long frame);
+    //void calculateInterval (long frame);
     
     int beatCount;
     
@@ -78,15 +81,21 @@ private:
     
     long frameCount;
     
-    float previousBeatTime;
+    //float previousBeatTime;
     
     float beatInterval;
     
     float theTempo;
     
+    double timeGrab;
+    
+    void updateBeatTime(double _value);
+    
     BTrack tracker { myHop };
     
     AudioBuffer<double> tempBuffer;
+    
+    std::vector<double> timez;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BpmometerAudioProcessor)
 };

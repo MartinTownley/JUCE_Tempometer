@@ -120,6 +120,9 @@ public:
      */
     static double getBeatTimeInSeconds (int frameNumber, int hopSize, int fs);
     
+    double getBeatPeriod();
+    double getTempo();
+    
 		
 private:
     
@@ -215,6 +218,8 @@ private:
     bool tempoFixed;                        /**< indicates whether the tempo should be fixed or not */
     bool beatDueInFrame;                    /**< indicates whether a beat is due in the current frame */
     int FFTLengthForACFCalculation;         /**< the FFT length for the auto-correlation function calculation */
+    
+    
     
 #ifdef USE_FFTW
     fftw_plan acfForwardFFT;                /**< forward fftw plan for calculating auto-correlation function */

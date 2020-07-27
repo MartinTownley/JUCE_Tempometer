@@ -83,7 +83,17 @@ double BTrack::getBeatTimeInSeconds (int frameNumber, int hopSize, int fs)
     return getBeatTimeInSeconds (frameNum, hopSize, fs);
 }
 
-
+//  =============================
+// (added by MT)
+double BTrack::getBeatPeriod()
+{
+    return beatPeriod;
+}
+//=======================================================================
+double BTrack::getTempo()
+{
+    return tempo;
+}
 
 //=======================================================================
 void BTrack::initialise (int hopSize_, int frameSize_)
