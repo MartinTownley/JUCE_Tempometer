@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "MeterComponent.h"
+#include "CircularBuffer.h"
 
 //==============================================================================
 /**
@@ -46,11 +47,22 @@ private:
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    float theTempo;
+    double theTempo;
     
     double beatInterval;
     
     double previousBeatTime;
+    
+    // Create a circular buffer for averaging:
+    CircularBuffer tempoBuffer;
+    
+    int tempoBufferSize;
+    //int initialSize;
+    
+    // This increments as the buffer gets filled with non zeros, and the sum is divided by this value to exclude zero values from the averaging.
+    int bufferCounter;
+    
+    double sum;
     
     BpmometerAudioProcessor& processor;
 

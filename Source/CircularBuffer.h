@@ -61,6 +61,11 @@ public:
         writeIndex = 0;
     }
     
+    std::vector<double> getBuffer()
+    {
+        return buffer;
+    }
+    
 private:
     
     std::vector<double> buffer;

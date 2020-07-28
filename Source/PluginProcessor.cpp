@@ -103,6 +103,8 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     frameCount = 0;
     
+    //tracker.se
+    
     //previousBeatTime = 0;
 }
 
@@ -158,7 +160,7 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 
         auto* buffReader = buffer.getReadPointer(channel, 0);
         
-        //Iterate samplesa nd use the buffReader to copy samples from our buffer to our temporary buffer
+        //Iterate samplesa and use the buffReader to copy samples from our buffer to our temporary buffer
         for(int samp = 0; samp < numSamples; ++samp)
         {
             tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
@@ -170,32 +172,28 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
         
         if (tracker.beatDueInCurrentFrame() == true)
         {
-            //calculateInterval( frameCount );
-            //DBG ( beatInterval );
-            //DBG (tracker.getBeatPeriod() );
-            
-            //calculateInterval( frameCount );
             
             updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
                                                           myHop,
                                                           sr ) );
             
-            //timeGrab = tracker.getBeatTimeInSeconds (frameCount, myHop, 44100);
-            
-            
-            
+            //DBG("Beat " << beatCount);
+            //DBG (tracker.getLatestCumulativeScoreValue() );
             beatCount ++;
         }
+        
         frameCount ++;
         
     }
+    
+    
 }
 
 void BpmometerAudioProcessor::updateBeatTime(double _value)
 {
     //This called in processBlock, getsBeatTimein Seconds and returns it here.
     timeGrab = _value;
-    
+    //DBG( timeGrab );
 }
 
 //void BpmometerAudioProcessor::calculateInterval (long frame)

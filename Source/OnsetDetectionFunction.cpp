@@ -21,6 +21,7 @@
 
 #include <math.h>
 #include "OnsetDetectionFunction.h"
+#include <iostream>
 
 //=======================================================================
 OnsetDetectionFunction::OnsetDetectionFunction (int hopSize_,int frameSize_)
@@ -261,7 +262,8 @@ double OnsetDetectionFunction::calculateOnsetDetectionFunctionSample (double* bu
 			odfSample = 1.0;
         }
 	}
-		
+    
+    //std::cout << "odfSample: " << odfSample << std::endl;
 	return odfSample;
 }
 

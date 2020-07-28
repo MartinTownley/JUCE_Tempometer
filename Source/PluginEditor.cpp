@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <numeric>
 
 //==============================================================================
 BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProcessor& p)
@@ -43,6 +44,24 @@ BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProc
     
     previousBeatTime = 0;
     beatInterval = 0;
+    
+    //---------
+    //Set size of tempos circular buffer
+    
+    tempoBufferSize = 20;
+    
+    tempoBuffer.resize( tempoBufferSize );
+    //Initialise values to zero:
+    for (int i=0; i < tempoBufferSize; i++)
+    {
+        tempoBuffer[i] = 0;
+    }
+    
+    //Initialise bufferCounter:
+    bufferCounter = 0;
+    
+    sum = 0;
+    
 }
 
 BpmometerAudioProcessorEditor::~BpmometerAudioProcessorEditor()
@@ -81,70 +100,38 @@ void BpmometerAudioProcessorEditor::timerCallback()
     updateInterval();
 }
 
-void BpmometerAudioProcessorEditor::calculateInterval()
-{
-    //Timestamp of the current beat:
-    double currentBeatTime = processor.getTimeGrab();
-    
-    // Calculate difference in time between beats:
-    beatInterval = (currentBeatTime - previousBeatTime);
-    DBG(beatInterval);
-    
-    theTempo = 60.0f / beatInterval;
-    
-    if (currentBeatTime != previousBeatTime)
-    {
-        previousBeatTime = currentBeatTime;
-         DBG(theTempo);
-        repaint();
-    }
-    
-//    int currentBeat = beat;
-//
-//    float currentInterval = interval;
-//
-//    float currentTempo = tempo;
-//
-//    if (currentBeat != previousBeat)
-//    {
-//        previousBeat = currentBeat;
-//
-//        previousInterval = currentInterval;
-//
-//        previousTempo = currentTempo;
-//
-//        repaint();
-}
+
 
 void BpmometerAudioProcessorEditor::updateInterval()
 {
+    // Gets the time of the beat from the processor:
     double currentBeatTime = processor.getTimeGrab();
     
-    beatInterval = (currentBeatTime - previousBeatTime);
+    //DBG( currentBeatTime );
     
+    // If the beat time changes, calculate the beatInterval:
     if(currentBeatTime != previousBeatTime)
     {
-        //DBG("CBTif: " << currentBeatTime);
-        //DBG("PBTif: " <<previousBeatTime);
-        //DBG ("Interval: " << beatInterval);
-        DBG( beatInterval );
+        // Calculate beat interval based on current and previous beat times:
+        beatInterval = (currentBeatTime - previousBeatTime);
+        
+        // Calculate tempo based on interval:
+        theTempo = 60.0f / beatInterval;
+        
+        //Push tempo value to the circular buffer for averaging:
+        tempoBuffer.addSampleToEnd (theTempo);
+        
+        //Make for loop here to sum the values.
+        
+        //DBG( sum );
+        //DBG("Sum: " << tempoSum );
+        DBG("break");
     }
     
     
     
-    //DBG("CBT: " << currentBeatTime);
-    
-    //DBG("PBT: " << previousBeatTime);
-    
     previousBeatTime = currentBeatTime;
     
-    //DBG("CBTNOW: " << currentBeatTime);
-    //DBG("PBTNOW: " <<previousBeatTime);
-    //Previous = 2.
-    //Current = 2.
-//    if (currentBeatTime != previousBeatTime)
-//    {
-//        previousBeatTime = currentBeatTime;
-//    }
+    
     
 }
