@@ -36,7 +36,12 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     addAndMakeVisible (indicatorSlider);
-    indicatorSlider.setRange (0, 1.0);
+    
+    //======
+    //RANGE:
+    this->setSliderValues();
+    //======
+    
     indicatorSlider.setTextValueSuffix (" ?");
     
     indicatorSlider.setNumDecimalPlacesToDisplay(1);
@@ -153,12 +158,20 @@ void MeterComponent::paint (Graphics& g)
 //        g.addTransform(AffineTransform::rotation (thirty2nd, getWidth()/2, getHeight()/2) );
 //    }
     
-//    g.setColour (Colours::white);
-//    g.setFont (40.0f);
-//    
-//    std::string tempoString = std::to_string(  processor.getTheTempo() );
-//    
-//    g.drawFittedText (tempoString, getLocalBounds(), Justification::centred, 1);
+    g.setColour (Colours::white);
+    g.setFont (40.0f);
+    
+    //std::string tempoString = std::to_string(  processor.getTheTempo() );
+    
+    std::string sliderValue = std::to_string ( indicatorSlider.getValue());
+    
+    g.drawFittedText (sliderValue, getLocalBounds(), Justification::centred, 1);
+    
+    
+    //============== TARGET ==============
+    
+    g.setFont (30.0f);
+    g.drawFittedText(targetString, getWidth()/2 - 25, getWidth()/10, 50, 50, Justification::centred, 1);
 }
 
 void MeterComponent::resized()
@@ -176,8 +189,32 @@ void MeterComponent::resized()
     auto indiSliderHeight = 2000;
 
     indicatorSlider.setBounds(area.removeFromBottom(3000));
-    
-    
-//    indicatorSlider.setBounds(-100, getHeight()/2 - 200, 1000, 1000);
+}
 
+void MeterComponent::passBPM(float bpmValue)
+{
+    
+    meterBPM = bpmValue;
+    
+    lowerLimit = targetBPM - 5;
+    
+    upperLimit = targetBPM + 5;
+    
+    indicatorSlider.setValue( meterBPM );
+    
+    
+}
+
+void MeterComponent::setSliderValues()
+{
+    
+    targetBPM = 120;
+    
+    targetString = std::to_string ( targetBPM );
+    
+    lowerLimit = targetBPM - 5;
+    
+    upperLimit = targetBPM + 5;
+    
+    indicatorSlider.setRange (lowerLimit, upperLimit);
 }

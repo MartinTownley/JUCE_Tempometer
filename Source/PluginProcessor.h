@@ -73,13 +73,15 @@ private:
     
     //void calculateInterval (long frame);
     
+    int division;
     
+    int chunkSize;
     
     int beatCount;
     
-    int myHop = 256;
+    int myHop = 64;
     
-    int trackBufferSize = myHop * 2;
+    //int trackBufferSize = myHop * 2;
     
     int sr = 44100;
     
@@ -95,11 +97,11 @@ private:
     
     void updateBeatTime(double _value);
     
-    BTrack tracker { myHop, myHop * 2 };
+    BTrack tracker { myHop, 128 };
     
     AudioBuffer<double> tempBuffer;
     
-    std::vector<double> timez;
+    //std::vector<double> timez;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BpmometerAudioProcessor)
 };

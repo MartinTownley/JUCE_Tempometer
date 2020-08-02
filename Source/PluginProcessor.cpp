@@ -99,14 +99,23 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // initialisation that you need..
     beatCount = 0;
     
-    
-    
     //Samples per block can be changed in the settings at runtime.;;p
 //    tempBuffer.setSize(1, samplesPerBlock);
     
-    tempBuffer.setSize(1, samplesPerBlock); // 128
+
+    
+    
     
     frameCount = 0;
+    
+    division = 4;
+    
+    chunkSize = samplesPerBlock / division;
+    //this gives us 128sample chunks, assuming bufferSize is 512.
+    
+    //myHop = chunkSize / 2; //hop size 64
+    
+    tempBuffer.setSize(1, chunkSize);// 512
     
 }
 
@@ -155,42 +164,74 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     // 1. Clear tempbuffer
     tempBuffer.clear();
     
-    // 2. Get a writeable pointer to the start of our temporary buffer:
-    auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0);
     
-//    // 3. Iterate the channels
-//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//    }
-    
-    // 4. Get read pointer to the buffer:
-    auto* buffReader = buffer.getReadPointer(0, 0);
-        
-        // 5. Iterate samples and use the buffReader to copy samples from our buffer to our temporary buffer
-    for(int samp = 0; samp < numSamples; ++samp)
+    for (int i = 0; i < division; ++i) // [1]
     {
-            //tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
-            // 6. Copy data from buffreader to tembuffwriter
-        tempBuffWriter[samp] = (buffReader[samp]);
-    }
         
-    // 7. Process the tempbuffer as an audioframe.
-    tracker.processAudioFrame(tempBuffer.getWritePointer(0));
+        auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
         
-    if (tracker.beatDueInCurrentFrame() == true)
-    {
-        updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
+        auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
+        
+        for (int samp = 0; samp < chunkSize; ++samp)
+        {
+            tempBuffWriter[samp] = buffReader[samp]; // [4]
+        }
+        
+        tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
+        
+        if (tracker.beatDueInCurrentFrame() == true)
+        {
+            beatCount ++;
+            
+            updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
                                                           myHop,
-                                                          sr ) );
-        beatCount ++;
+                                                          sr) ); // [6]
+        }
+        frameCount ++; // [7]
     }
-    // Advance framecount
-    frameCount ++;
-        //DBG("Inside: " << frameCount);
     
     
     
-    //DBG("FrameCountOutside: " << frameCount);
+   
+    
+    
+    
+//    // 2. Get a writeable pointer to the start of our temporary buffer:
+//    auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0);
+//
+////    // 3. Iterate the channels
+////    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+////    {
+////    }
+//
+//    // 4. Get read pointer to the audio buffer:
+//    auto* buffReader = buffer.getReadPointer(0, 0);
+//
+//        // 5. Iterate samples and use the buffReader to copy samples from our buffer to our temporary buffer
+//    for(int samp = 0; samp < numSamples; ++samp)
+//    {
+//            //tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
+//            // 6. Copy data from buffreader to tembuffwriter
+//        tempBuffWriter[samp] = (buffReader[samp]);
+//    }
+//
+//    // 7. Process the tempbuffer as an audioframe.
+//    tracker.processAudioFrame(tempBuffer.getWritePointer(0));
+//
+//    if (tracker.beatDueInCurrentFrame() == true)
+//    {
+//        updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
+//                                                          myHop,
+//                                                          sr ) );
+//        beatCount ++;
+//    }
+//    // Advance framecount
+//    frameCount ++;
+//        //DBG("Inside: " << frameCount);
+    
+    
+    
+    
     
 }
 

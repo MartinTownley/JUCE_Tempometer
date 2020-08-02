@@ -98,6 +98,8 @@ void BpmometerAudioProcessorEditor::timerCallback()
     //DBG(processor.getTimeGrab());
     
     updateInterval();
+    
+    meterComp.passBPM( theTempo );
 }
 
 

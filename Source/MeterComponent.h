@@ -35,6 +35,10 @@ public:
     
     void paintCircle (int radius);
     void resized() override;
+    
+    void passBPM(float bpmValue);
+    
+    void setSliderValues();
 
 private:
     
@@ -45,6 +49,18 @@ private:
     Path p;
     
     const Colour customBrown {0xff523f43};
+                
+    float meterBPM; //the value displayed and given to the slider.
+    
+    int targetBPM;
+    
+    std::string targetString;
+    
+    int bpmRange; //range for the slider, +/- the target.
+    
+    int upperLimit;
+    
+    int lowerLimit;
     
     TextButton header;
     
