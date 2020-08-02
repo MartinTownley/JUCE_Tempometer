@@ -99,13 +99,15 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // initialisation that you need..
     beatCount = 0;
     
-    tempBuffer.setSize(1, samplesPerBlock);
+    
+    
+    //Samples per block can be changed in the settings at runtime.;;p
+//    tempBuffer.setSize(1, samplesPerBlock);
+    
+    tempBuffer.setSize(1, samplesPerBlock); // 128
     
     frameCount = 0;
     
-    //tracker.se
-    
-    //previousBeatTime = 0;
 }
 
 void BpmometerAudioProcessor::releaseResources()
@@ -143,49 +145,52 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    const auto numSamples = buffer.getNumSamples();
-    //const auto startSample = buffer.get
-//    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-//        buffer.clear (i, 0, buffer.getNumSamples());
     
+    const auto numSamples = buffer.getNumSamples();
+    
+    //        buffer.clear (i, 0, buffer.getNumSamples());
+    
+    //====================
+    
+    // 1. Clear tempbuffer
     tempBuffer.clear();
     
-     // Get a writeable pointer to the start of our temporary buffer:
+    // 2. Get a writeable pointer to the start of our temporary buffer:
     auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0);
     
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    // 3. Iterate the channels
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//    }
+    
+    // 4. Get read pointer to the buffer:
+    auto* buffReader = buffer.getReadPointer(0, 0);
+        
+        // 5. Iterate samples and use the buffReader to copy samples from our buffer to our temporary buffer
+    for(int samp = 0; samp < numSamples; ++samp)
     {
-        //auto* channelData = buffer.getWritePointer (channel);
-
-        auto* buffReader = buffer.getReadPointer(channel, 0);
+            //tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
+            // 6. Copy data from buffreader to tembuffwriter
+        tempBuffWriter[samp] = (buffReader[samp]);
+    }
         
-        //Iterate samplesa and use the buffReader to copy samples from our buffer to our temporary buffer
-        for(int samp = 0; samp < numSamples; ++samp)
-        {
-            tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
-            
-            tempBuffWriter[samp] = (buffReader[samp]);
-        }
+    // 7. Process the tempbuffer as an audioframe.
+    tracker.processAudioFrame(tempBuffer.getWritePointer(0));
         
-        tracker.processAudioFrame(tempBuffer.getWritePointer(0));
-        
-        if (tracker.beatDueInCurrentFrame() == true)
-        {
-            
-            updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
+    if (tracker.beatDueInCurrentFrame() == true)
+    {
+        updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
                                                           myHop,
                                                           sr ) );
-            
-            //DBG("Beat " << beatCount);
-            //DBG (tracker.getLatestCumulativeScoreValue() );
-            beatCount ++;
-        }
-        
-        frameCount ++;
-        
+        beatCount ++;
     }
+    // Advance framecount
+    frameCount ++;
+        //DBG("Inside: " << frameCount);
     
+    
+    
+    //DBG("FrameCountOutside: " << frameCount);
     
 }
 

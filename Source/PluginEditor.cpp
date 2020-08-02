@@ -119,16 +119,14 @@ void BpmometerAudioProcessorEditor::updateInterval()
         theTempo = 60.0f / beatInterval;
         
         //Push tempo value to the circular buffer for averaging:
-        tempoBuffer.addSampleToEnd (theTempo);
+        //tempoBuffer.addSampleToEnd (theTempo);
         
         //Make for loop here to sum the values.
         
-        //DBG( sum );
+        DBG( theTempo );
         //DBG("Sum: " << tempoSum );
-        DBG("break");
+        //DBG("break");
     }
-    
-    
     
     previousBeatTime = currentBeatTime;
     

@@ -73,9 +73,13 @@ private:
     
     //void calculateInterval (long frame);
     
+    
+    
     int beatCount;
     
     int myHop = 256;
+    
+    int trackBufferSize = myHop * 2;
     
     int sr = 44100;
     
@@ -91,7 +95,7 @@ private:
     
     void updateBeatTime(double _value);
     
-    BTrack tracker { myHop };
+    BTrack tracker { myHop, myHop * 2 };
     
     AudioBuffer<double> tempBuffer;
     

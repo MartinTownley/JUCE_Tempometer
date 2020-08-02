@@ -41,7 +41,7 @@ BTrack::BTrack (int hopSize_)
 
 //=======================================================================
 BTrack::BTrack (int hopSize_, int frameSize_)
- : odf (hopSize_, frameSize_, ComplexSpectralDifferenceHWR, HanningWindow)
+ : odf (hopSize_, frameSize_, EnergyDifference, HanningWindow)
 {
     initialise (hopSize_, frameSize_);
 }
