@@ -12,6 +12,7 @@
 #include "PluginEditor.h"
 #include <numeric>
 
+
 //==============================================================================
 BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProcessor& p)
     : AudioProcessorEditor (&p),
@@ -26,23 +27,14 @@ BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProc
     myTabs.addTab("Meter", Colours::orange,
                   &meterComp, false);
     
-    
     setSize (800, 600);
     
+    timerValue = 60;
     
-    Timer::startTimerHz(60);
-    
-    //-=====
-    
-    double val = 37.777779;
-    
-    double rounded_down = floorf(val * 100) / 100;   /* Result: 37.77 */
-    double nearest = roundf(val * 100) / 100;  /* Result: 37.78 */
-    double rounded_up = ceilf(val * 100) / 100;      /* Result: 37.78 */
-    
-    //DBG(rounded_up);
+    Timer::startTimerHz( timerValue );
     
     previousBeatTime = 0;
+    
     beatInterval = 0;
     
     //---------
@@ -72,15 +64,7 @@ BpmometerAudioProcessorEditor::~BpmometerAudioProcessorEditor()
 //==============================================================================
 void BpmometerAudioProcessorEditor::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    //g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-//    g.setColour (Colours::white);
-//    g.setFont (15.0f);
-//
-//    std::string tempoString = std::to_string(  processor.getTheTempo() );
-//
-//
-//    g.drawFittedText (tempoString, getLocalBounds(), Justification::centred, 1);
+    
 }
 
 void BpmometerAudioProcessorEditor::resized()
@@ -90,48 +74,63 @@ void BpmometerAudioProcessorEditor::resized()
 
 void BpmometerAudioProcessorEditor::timerCallback()
 {
-    //processor.calculateTempo();
-    //repaint();
-    //DBG( processor.getTimeGrab() );
-    //DBG (processor.getTimeGrab() );
-    //calculateInterval();
-    //DBG(processor.getTimeGrab());
+    //mySmoothed.setTargetValue ( updateTempo() );
     
-    updateInterval();
+    //meterComp.passBPM( mySmoothed.getNextValue() );
     
-    meterComp.passBPM( theTempo );
-}
-
-
-
-void BpmometerAudioProcessorEditor::updateInterval()
-{
-    // Gets the time of the beat from the processor:
-    double currentBeatTime = processor.getTimeGrab();
+    //meterComp.passBPM( mySmoothed.getNextValue() );
     
-    //DBG( currentBeatTime );
+    //meterComp.passBPM ( calculateTempo() );
     
-    // If the beat time changes, calculate the beatInterval:
-    if(currentBeatTime != previousBeatTime)
-    {
-        // Calculate beat interval based on current and previous beat times:
-        beatInterval = (currentBeatTime - previousBeatTime);
-        
-        // Calculate tempo based on interval:
-        theTempo = 60.0f / beatInterval;
-        
-        //Push tempo value to the circular buffer for averaging:
-        //tempoBuffer.addSampleToEnd (theTempo);
-        
-        //Make for loop here to sum the values.
-        
-        DBG( theTempo );
-        //DBG("Sum: " << tempoSum );
-        //DBG("break");
-    }
+    //calculateTempo(); //tempo continually calculated
     
-    previousBeatTime = currentBeatTime;
+    meterComp.tempoChanged();
     
-    
+    //meterComp.passBPM ( theTempo );
     
 }
+
+
+
+//void BpmometerAudioProcessorEditor::calculateTempo()
+//{
+//    // Gets the time of the beat from the processor:
+//    double currentBeatTime = processor.getTimeGrab();
+//    
+//    // If the beat time changes, calculate the beatInterval:
+//    if(currentBeatTime != previousBeatTime)
+//    {
+//        // Calculate beat interval based on current and previous beat times:
+//        beatInterval = (currentBeatTime - previousBeatTime);
+//        
+//        // Calculate tempo based on interval:
+//        theTempo = 60.0f / beatInterval;
+//        
+//        DBG("theTempo: " << theTempo);
+//        
+//        //call tempoChange function in metercomponent
+//        
+//    }
+//    
+//    previousBeatTime = currentBeatTime;
+//    
+//    
+//    
+//}
+
+//float BpmometerAudioProcessorEditor::smoothTempo(float _tempo)
+//{
+//    
+//    //Get rid of decimals here.
+//    //double rounded_down = floorf(_tempo * 100) / 100;
+//
+//    //int tempoInt = roundToInt(_tempo);
+//    
+//    //smoothed.setTargetValue ( tempoInt ); //smoothe incoming value
+//    
+//    //float nextTempo = smoothed.getNextValue();
+//    //DBG(nextTempo);
+//    
+//    return;
+//}
+

@@ -15,11 +15,7 @@
 MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
 {
     
-    //=======
-//    header.setButtonText ("Header");
-//    addAndMakeVisible (header);
-    
-    //=======
+  
     
     
     indicatorSlider.setLookAndFeel (&altLookAndFeel);
@@ -30,6 +26,8 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setTextBoxStyle (Slider::TextEntryBoxPosition::NoTextBox, true, 100, 50);
     
+    indicatorSlider.setNumDecimalPlacesToDisplay(1);
+    
     
     DBG( "pos: " << indicatorSlider.getTextBoxPosition() );
     //indicatorSlider.setMinValue(0);
@@ -39,12 +37,18 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     //======
     //RANGE:
-    this->setSliderValues();
+    this->initSliderValues();
     //======
     
     indicatorSlider.setTextValueSuffix (" ?");
     
-    indicatorSlider.setNumDecimalPlacesToDisplay(1);
+    previousBeatTime = 0;
+    
+    beatInterval = 0;
+    
+    //
+    smoothTempo.reset(60, 0.1);
+    
 
 }
 
@@ -54,10 +58,13 @@ MeterComponent::~MeterComponent()
 
 void MeterComponent::paint (Graphics& g)
 {
-    //DRAW NUMBER:
+    //=== background
+    g.fillAll(juce::Colour (Colours::grey));
     
+    g.setColour (Colours::grey);
+    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
     
-    //========
+    //======== slider
     auto area = getLocalBounds();
     
     auto radius =  540;
@@ -65,42 +72,12 @@ void MeterComponent::paint (Graphics& g)
     
     auto centrePoint = juce::Point<float> (getWidth()/2, getHeight()/2);
     
-    
-    
-    g.fillAll(juce::Colour (customBrown));
-    
-    //g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
-    
-    g.setColour (Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-    
-    
-    
     indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
-    //======CIRCLE
-//    g.setColour (Colours::white);
-//    g.drawEllipse(getWidth()/2 - (radius/2),getHeight()/2 - (radius/2)  , radius,radius,1.0);
-    //=========
+  
     
     
-    //=========== PATH orange
-//    g.setColour (juce::Colours::orange);
-//    Path arcPath;
-//
-//    arcPath.addCentredArc(100, 100, 50, 50, 0, -0.8 *float_Pi, 0.8* float_Pi, true);
-//
-//    auto myStroke = PathStrokeType(1.0, juce::PathStrokeType::JointStyle::curved, juce::PathStrokeType::EndCapStyle::rounded);
-//
-//    myStroke.createStrokedPath(arcPath, arcPath);
-//
-//    g.fillPath (arcPath);
-   
-    //========
-    //PIE: yellow
-    g.setColour(juce::Colours::yellow);
-    
-    
-    //=============== WO Lambda
+    //========== Sections:
+    g.setColour(juce::Colours::purple);
     
     const auto division = 10;
     
@@ -145,46 +122,26 @@ void MeterComponent::paint (Graphics& g)
     g.restoreState();
     
     
-    //Alternative drawing:=======
-//    auto x1 = getWidth()/2 + cos(0) * 100;
-//    auto y1 = getHeight()/2 + sin(0) * 100;
-//    auto x2 = getWidth()/2 + cos(0) * 200;
-//    auto y2 = getHeight()/2 + sin(0) * 200;
-//
-//    g.setColour(juce::Colours::pink);
-//    for ( int i =0; i<50; ++i)
-//    {
-//    g.drawLine(x1, y1, x2, y2);
-//        g.addTransform(AffineTransform::rotation (thirty2nd, getWidth()/2, getHeight()/2) );
-//    }
-    
+    //========== slider string
     g.setColour (Colours::white);
     g.setFont (40.0f);
     
-    //std::string tempoString = std::to_string(  processor.getTheTempo() );
+    setSliderString();
     
-    std::string sliderValue = std::to_string ( indicatorSlider.getValue());
-    
-    g.drawFittedText (sliderValue, getLocalBounds(), Justification::centred, 1);
+    g.drawFittedText (sliderString, getLocalBounds(), Justification::centred, 1);
     
     
-    //============== TARGET ==============
-    
+    //============== CENTRAL ==============
     g.setFont (30.0f);
-    g.drawFittedText(targetString, getWidth()/2 - 25, getWidth()/10, 50, 50, Justification::centred, 1);
+    g.drawFittedText(centralString, getWidth()/2 - 25, getWidth()/10, 50, 50, Justification::centred, 1);
+    
 }
 
 void MeterComponent::resized()
 {
     //============
     auto area = getLocalBounds();
-    
-    
-    //============
-//    auto headerFooterHeight = 36;
-//    header.setBounds (area.removeFromTop (headerFooterHeight));
-    //============
-    //============
+
     //============
     auto indiSliderHeight = 2000;
 
@@ -193,28 +150,91 @@ void MeterComponent::resized()
 
 void MeterComponent::passBPM(float bpmValue)
 {
+    //meterBPM is a float
     
-    meterBPM = bpmValue;
+    //_theTempo = bpmValue; //this goes to the slider.
     
-    lowerLimit = targetBPM - 5;
+    //DBG(_theTempo);
+    //bpmInt = roundToInt(meterBPM);
     
-    upperLimit = targetBPM + 5;
     
-    indicatorSlider.setValue( meterBPM );
+    //rounded_down = floorf(meterBPM * 100) / 100;   /* Result: 37.77 */
+    
+    //    double rounded_down = floorf(_tempo * 100) / 100;
+    //
+    //    int tempoInt = roundToInt(_tempo);
+    
+    
+    
+    //lowerLimit = centralBPM - 5;
+    
+    //upperLimit = centralBPM + 5;
+    
+    
     
     
 }
 
-void MeterComponent::setSliderValues()
+void MeterComponent::tempoChanged()
 {
+    // Gets the time of the beat from the processor:
+    double currentBeatTime = processor.getTimeGrab();
     
-    targetBPM = 120;
+    // If the beat time changes, calculate the beatInterval:
+    if(currentBeatTime != previousBeatTime)
+    {
+        // Calculate beat interval based on current and previous beat times:
+        beatInterval = (currentBeatTime - previousBeatTime);
+        
+        // Calculate tempo based on interval:
+        //_theTempo = 60.0f / beatInterval;
+        
+        smoothTempo.setTargetValue( 60.0f / beatInterval );
+        
+        //DBG( "smooth: " << smoothTempo.getNextValue() );
+        
+        //DBG("smoothTempo: " << smoothTempo.getNextValue() );
+        
+        //indicatorSlider.setValue( _theTempo );
+        
+        //call tempoChange function in metercomponent
+        
+    }
     
-    targetString = std::to_string ( targetBPM );
+    //smoothTempo.setTargetValue
     
-    lowerLimit = targetBPM - 5;
+    auto _theTempo = smoothTempo.getNextValue();
     
-    upperLimit = targetBPM + 5;
+    indicatorSlider.setValue( _theTempo );
+    //DBG( "smoothed: " << smoothed );
+    //smoothTempo.getNextValue();
+    
+    previousBeatTime = currentBeatTime;
+    
+}
+
+void MeterComponent::initSliderValues()
+{
+    // Funciton gets called in constructor.
+    centralBPM = 120;
+    
+    centralString = std::to_string ( centralBPM );
+    
+    lowerLimit = centralBPM - 5;
+    
+    upperLimit = centralBPM + 5;
     
     indicatorSlider.setRange (lowerLimit, upperLimit);
+    
+    
+}
+
+void MeterComponent::setSliderString()
+{
+    
+    //======== slider value string=======
+    //sliderString = std::to_string ( _theTempo );
+    //sliderString = std::to_string ( _theTempo );
+    
+    
 }

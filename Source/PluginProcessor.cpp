@@ -102,10 +102,6 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     //Samples per block can be changed in the settings at runtime.;;p
 //    tempBuffer.setSize(1, samplesPerBlock);
     
-
-    
-    
-    
     frameCount = 0;
     
     division = 4;
@@ -242,24 +238,7 @@ void BpmometerAudioProcessor::updateBeatTime(double _value)
     //DBG( timeGrab );
 }
 
-//void BpmometerAudioProcessor::calculateInterval (long frame)
-//{
-//    //Timestamp of the current beat:
-//    float currentBeatTime = (float) tracker.getBeatTimeInSeconds(frame, myHop, sr);
-//
-//    // Calculate difference in time between beats:
-//    beatInterval = (currentBeatTime - previousBeatTime);
-//
-//    previousBeatTime = currentBeatTime;
-//
-//}
 
-//void BpmometerAudioProcessor::calculateTempo ()
-//{
-//    // Divide 60 by the interval to get BPM:
-//    theTempo = 60.0f / beatInterval;
-//
-//}
 
 double BpmometerAudioProcessor::getTimeGrab()
 {

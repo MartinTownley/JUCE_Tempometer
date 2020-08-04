@@ -33,10 +33,15 @@ public:
     
     void timerCallback() override;
     
-    void calculateInterval();
+    //void calculateInterval();
     
-    void updateInterval();
-
+    void calculateTempo();
+    
+    //float smoothTempo(float _tempo); //stays as float here so that it can animate smoothly. Change the value to int in the metercomponent.
+    
+    //float singlePoleFilter (const float tempo, float prev_val);
+    
+    
 private:
     
     
@@ -45,10 +50,14 @@ private:
     
     MeterComponent meterComp;
     
-    
+    //SmoothedValue<float, ValueSmoothingTypes::Linear> smoothed;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    double theTempo;
+    
+    int timerValue;
+    
+    
+    float theTempo;
     
     double beatInterval;
     

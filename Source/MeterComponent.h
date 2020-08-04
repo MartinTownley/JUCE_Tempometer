@@ -38,23 +38,37 @@ public:
     
     void passBPM(float bpmValue);
     
-    void setSliderValues();
+    void setSliderString();
+    
+    void initSliderValues();
+    
+    void tempoChanged();
+    
+     
 
 private:
     
+    const Colour customBrown {0xff523f43};
+   
     AltLookAndFeel altLookAndFeel;
     
     Slider indicatorSlider;
     
-    Path p;
+    double previousBeatTime;
     
-    const Colour customBrown {0xff523f43};
+    double beatInterval;
+    
+    float smoothNext;
+    
+    SmoothedValue<float> smoothTempo;
                 
-    float meterBPM; //the value displayed and given to the slider.
+    //float _theTempo; //the value displayed and given to the slider.
     
-    int targetBPM;
+    float roundedDown;
     
-    std::string targetString;
+    int centralBPM; // this is the 12 o'clock BPM.
+    
+    
     
     int bpmRange; //range for the slider, +/- the target.
     
@@ -64,7 +78,9 @@ private:
     
     TextButton header;
     
+    std::string centralString;
     
+    std::string sliderString;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BpmometerAudioProcessor& processor;
