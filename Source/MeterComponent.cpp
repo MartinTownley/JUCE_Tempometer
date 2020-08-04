@@ -15,12 +15,7 @@
 MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
 {
     
-  
-    
-    
     indicatorSlider.setLookAndFeel (&altLookAndFeel);
-    
-    
     
     indicatorSlider.setRotaryParameters (degreesToRadians(315.0), degreesToRadians(405.0), false );
     
@@ -28,19 +23,19 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setNumDecimalPlacesToDisplay(1);
     
-    
-    DBG( "pos: " << indicatorSlider.getTextBoxPosition() );
-    //indicatorSlider.setMinValue(0);
-    
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
+    
+    //indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
     addAndMakeVisible (indicatorSlider);
     
     //======
     //RANGE:
-    this->initSliderValues();
+    //this->initSliderValues(100);
     //======
     
-    indicatorSlider.setTextValueSuffix (" ?");
+    //this->setCentralString("?");
+    
+    
     
     previousBeatTime = 0;
     
@@ -48,6 +43,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     //
     smoothTempo.reset(refreshRate, 0.3); //same callbackTimer rate.
+    
     
 
 }
@@ -59,7 +55,7 @@ MeterComponent::~MeterComponent()
 void MeterComponent::paint (Graphics& g)
 {
     //=== background
-    g.fillAll(juce::Colour (Colours::grey));
+    g.fillAll(juce::Colour (Colours::darkslategrey));
     
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
@@ -72,12 +68,12 @@ void MeterComponent::paint (Graphics& g)
     
     auto centrePoint = juce::Point<float> (getWidth()/2, getHeight()/2);
     
-    indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
-  
+    
+   indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
     
     
     //========== Sections:
-    g.setColour(juce::Colours::purple);
+    g.setColour(juce::Colours::lightgrey);
     
     const auto division = 10;
     
@@ -113,7 +109,7 @@ void MeterComponent::paint (Graphics& g)
 
     for (int i = 0; i < numLines; ++i)
     {
-        g.drawLine (line, 1.0f);
+        g.drawLine (line, 2.0f);
         g.addTransform(AffineTransform::rotation (rotation,
                                                   getWidth()/2,
                                                   3*getHeight()/4) );
@@ -134,6 +130,7 @@ void MeterComponent::paint (Graphics& g)
     //============== CENTRAL ==============
     g.setFont (30.0f);
     g.drawFittedText(centralString, getWidth()/2 - 25, getWidth()/10, 50, 50, Justification::centred, 1);
+    
     
 }
 
@@ -187,27 +184,24 @@ void MeterComponent::tempoChanged()
         beatInterval = (currentBeatTime - previousBeatTime);
         
         // Calculate tempo based on interval:
+        
+        //smoothTempo.setTargetValue ( 60.0f / beatInterval );
+        
+        
         float tempoFloat = 60.0f / beatInterval;
-        
+
         int tempoInt = roundToInt(tempoFloat);
-        
-        //smoothTempo.setTargetValue( 60.0f / beatInterval );
-        
+
         smoothTempo.setTargetValue ( tempoInt );
-        
-        //DBG( "smooth: " << smoothTempo.getNextValue() );
         
     }
     
     auto _theTempo =  smoothTempo.getNextValue() ;
     
-    //auto rounded_down = floorf(_theTempo * 1) / 1;
-    
-    
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
     
-    setSliderString( indicatorSlider.getValue()  );
+    setSliderStrings( indicatorSlider.getValue()  );
    
     previousBeatTime = currentBeatTime;
     
@@ -215,23 +209,31 @@ void MeterComponent::tempoChanged()
     
 }
 
-void MeterComponent::initSliderValues()
+void MeterComponent::setSliderValues(int _centralBPM)
 {
     // Funciton gets called in constructor.
-    centralBPM = 120;
+    centralBPM = _centralBPM;
     
-    centralString = std::to_string ( centralBPM );
+    //centralString = std::to_string ( centralBPM );
     
-    lowerLimit = centralBPM - 5;
+    std::string question = "?";
     
-    upperLimit = centralBPM + 5;
+    
+    int lowerLimit = centralBPM - 5;
+    
+    int upperLimit = centralBPM + 5;
     
     indicatorSlider.setRange (lowerLimit, upperLimit);
     
     
 }
 
-void MeterComponent::setSliderString(float value)
+void MeterComponent::setCentralString(std::string string)
+{
+    centralString = string;
+}
+
+void MeterComponent::setSliderStrings(float value)
 {
     
     

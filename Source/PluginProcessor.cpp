@@ -158,33 +158,12 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     //====================
     
     // 1. Clear tempbuffer
+    
+    
     tempBuffer.clear();
     
+    runBeatTracker( buffer );
     
-    for (int i = 0; i < division; ++i) // [1]
-    {
-        
-        auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
-        
-        auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
-        
-        for (int samp = 0; samp < chunkSize; ++samp)
-        {
-            tempBuffWriter[samp] = buffReader[samp]; // [4]
-        }
-        
-        tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
-        
-        if (tracker.beatDueInCurrentFrame() == true)
-        {
-            beatCount ++;
-            
-            updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
-                                                          myHop,
-                                                          sr) ); // [6]
-        }
-        frameCount ++; // [7]
-    }
     
     
     
@@ -225,10 +204,34 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 //    frameCount ++;
 //        //DBG("Inside: " << frameCount);
     
-    
-    
-    
-    
+}
+
+void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
+{
+    for (int i = 0; i < division; ++i) // [1]
+    {
+        
+        auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
+        
+        auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
+        
+        for (int samp = 0; samp < chunkSize; ++samp)
+        {
+            tempBuffWriter[samp] = buffReader[samp]; // [4]
+        }
+        
+        tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
+        
+        if (tracker.beatDueInCurrentFrame() == true)
+        {
+            beatCount ++;
+            
+            updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
+                                                          myHop,
+                                                          sr) ); // [6]
+        }
+        frameCount ++; // [7]
+    }
 }
 
 void BpmometerAudioProcessor::updateBeatTime(double _value)

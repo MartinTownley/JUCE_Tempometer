@@ -97,6 +97,8 @@ private:
     
     void updateBeatTime(double _value);
     
+    void runBeatTracker(AudioBuffer<float>& buffer);
+    
     BTrack tracker { myHop, 128 };
     
     AudioBuffer<double> tempBuffer;
