@@ -47,7 +47,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     beatInterval = 0;
     
     //
-    smoothTempo.reset(60, 0.1);
+    smoothTempo.reset(refreshRate, 0.3); //same callbackTimer rate.
     
 
 }
@@ -126,7 +126,7 @@ void MeterComponent::paint (Graphics& g)
     g.setColour (Colours::white);
     g.setFont (40.0f);
     
-    setSliderString();
+    //setSliderString();
     
     g.drawFittedText (sliderString, getLocalBounds(), Justification::centred, 1);
     
@@ -187,29 +187,31 @@ void MeterComponent::tempoChanged()
         beatInterval = (currentBeatTime - previousBeatTime);
         
         // Calculate tempo based on interval:
-        //_theTempo = 60.0f / beatInterval;
+        float tempoFloat = 60.0f / beatInterval;
         
-        smoothTempo.setTargetValue( 60.0f / beatInterval );
+        int tempoInt = roundToInt(tempoFloat);
+        
+        //smoothTempo.setTargetValue( 60.0f / beatInterval );
+        
+        smoothTempo.setTargetValue ( tempoInt );
         
         //DBG( "smooth: " << smoothTempo.getNextValue() );
         
-        //DBG("smoothTempo: " << smoothTempo.getNextValue() );
-        
-        //indicatorSlider.setValue( _theTempo );
-        
-        //call tempoChange function in metercomponent
-        
     }
     
-    //smoothTempo.setTargetValue
+    auto _theTempo =  smoothTempo.getNextValue() ;
     
-    auto _theTempo = smoothTempo.getNextValue();
+    //auto rounded_down = floorf(_theTempo * 1) / 1;
+    
     
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
-    //smoothTempo.getNextValue();
     
+    setSliderString( indicatorSlider.getValue()  );
+   
     previousBeatTime = currentBeatTime;
+    
+    repaint();
     
 }
 
@@ -229,11 +231,12 @@ void MeterComponent::initSliderValues()
     
 }
 
-void MeterComponent::setSliderString()
+void MeterComponent::setSliderString(float value)
 {
     
+    
     //======== slider value string=======
-    //sliderString = std::to_string ( _theTempo );
+    sliderString = std::to_string (roundToInt ( value ) );
     //sliderString = std::to_string ( _theTempo );
     
     

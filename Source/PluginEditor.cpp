@@ -29,7 +29,7 @@ BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProc
     
     setSize (800, 600);
     
-    timerValue = 60;
+    timerValue = meterComp.getRefreshRate();
     
     Timer::startTimerHz( timerValue );
     
@@ -53,6 +53,8 @@ BpmometerAudioProcessorEditor::BpmometerAudioProcessorEditor (BpmometerAudioProc
     bufferCounter = 0;
     
     sum = 0;
+    
+    //meterComp.getSmoothTempo().reset(timerValue, 0.3);
     
 }
 

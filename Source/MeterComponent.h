@@ -38,11 +38,15 @@ public:
     
     void passBPM(float bpmValue);
     
-    void setSliderString();
+    void setSliderString(float value);
     
     void initSliderValues();
     
     void tempoChanged();
+    
+    int getRefreshRate(){
+        return refreshRate;
+    }
     
      
 
@@ -58,17 +62,17 @@ private:
     
     double beatInterval;
     
-    float smoothNext;
+    //float smoothNext;
     
     SmoothedValue<float> smoothTempo;
                 
     //float _theTempo; //the value displayed and given to the slider.
     
-    float roundedDown;
+    //float roundedDown;
     
     int centralBPM; // this is the 12 o'clock BPM.
     
-    
+    int refreshRate { 60 };
     
     int bpmRange; //range for the slider, +/- the target.
     

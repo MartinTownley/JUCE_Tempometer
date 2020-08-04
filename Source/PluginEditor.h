@@ -35,7 +35,7 @@ public:
     
     //void calculateInterval();
     
-    void calculateTempo();
+    //void calculateTempo();
     
     //float smoothTempo(float _tempo); //stays as float here so that it can animate smoothly. Change the value to int in the metercomponent.
     
