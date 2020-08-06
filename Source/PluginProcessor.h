@@ -70,7 +70,7 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    
+    void runBeatTracker(AudioBuffer<float>& buffer);
     
     double getTimeGrab();
     
@@ -104,11 +104,18 @@ private:
     
     void updateBeatTime(double _value);
     
-    void runBeatTracker(AudioBuffer<float>& buffer);
-    
     BTrack tracker { myHop, 128 };
     
     AudioBuffer<double> tempBuffer;
+    
+    //RunState enum for the beat tracker:
+    enum class RunState
+    {
+        Running,
+        Stopped
+    };
+    // RunState instance:
+    RunState runState; //default is stopped
     
     //std::vector<double> timez;
     //=============================

@@ -189,55 +189,22 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
     // 1. Clear tempbuffer
     
-    
     tempBuffer.clear();
     
-    runBeatTracker( buffer );
-    
-    
-    
-    
-   
-    
-    
-    
-//    // 2. Get a writeable pointer to the start of our temporary buffer:
-//    auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0);
-//
-////    // 3. Iterate the channels
-////    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-////    {
-////    }
-//
-//    // 4. Get read pointer to the audio buffer:
-//    auto* buffReader = buffer.getReadPointer(0, 0);
-//
-//        // 5. Iterate samples and use the buffReader to copy samples from our buffer to our temporary buffer
-//    for(int samp = 0; samp < numSamples; ++samp)
-//    {
-//            //tempBuffWriter[samp] += static_cast<float> (buffReader[samp]);
-//            // 6. Copy data from buffreader to tembuffwriter
-//        tempBuffWriter[samp] = (buffReader[samp]);
-//    }
-//
-//    // 7. Process the tempbuffer as an audioframe.
-//    tracker.processAudioFrame(tempBuffer.getWritePointer(0));
-//
-//    if (tracker.beatDueInCurrentFrame() == true)
-//    {
-//        updateBeatTime ( tracker.getBeatTimeInSeconds( frameCount,
-//                                                          myHop,
-//                                                          sr ) );
-//        beatCount ++;
-//    }
-//    // Advance framecount
-//    frameCount ++;
-//        //DBG("Inside: " << frameCount);
+    //runBeatTracker( buffer );
     
 }
 
 void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
 {
+    //DBG("BT running");
+    
+    if (runState == RunState::Stopped)
+    {
+        runState = RunState::Running;
+        
+    }
+    
     for (int i = 0; i < division; ++i) // [1]
     {
         

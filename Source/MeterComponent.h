@@ -107,7 +107,7 @@ public:
         return refreshRate;
     }
     
-    void runCountdown();
+    void runSlider();
     
     void timerCallback() override;
     
@@ -143,24 +143,24 @@ private:
     
     TextButton launchLaterButton {"Launch Later"};
     
-    int buttonDelayTime;
+    int buttonDelaySecs;
     
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchLaterAttach;
     
     //-------- Button enum
     
-    enum class CountdownState
+    enum class SliderState
     {
-        Run,
-        Stop
+        Vis,
+        Invis
     };
-    //-------- CountdownState object
+    //-------- RunState object
     
-    CountdownState countdownState { CountdownState::Stop }; //default
+    SliderState sliderState { SliderState::Invis }; //default
     
     TextButton launchNowButton { "Launch Now" };
     
-    int countdownTime;
+    
     
     
     std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchNowAttach;

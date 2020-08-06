@@ -26,7 +26,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
     //indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
-    addAndMakeVisible (indicatorSlider);
+    //addAndMakeVisible (&indicatorSlider);
     
     //======
     //RANGE:
@@ -53,14 +53,22 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     launchLaterButton.setToggleState(false, NotificationType::dontSendNotification);
     
-    //launchLaterButton.onClick = [this]() {runCountdown(); };
     
-    launchLaterDelayTime = 5;
-    // Button has a delay
+    
+    buttonDelaySecs = 2;
+    
+    // LaunchLater Button has a delay
     launchLaterButton.onClick = [this]() {
-        Timer::callAfterDelay (buttonDelayTime * 1000, [this](){ this->testFunction() ; } );
+        Timer::callAfterDelay (buttonDelaySecs * 1000, [this](){ this->runSlider() ; } );
+        
+        this->testFunction();
+        
+        //Another function that happens immediately - running the beat tracker.
+        
     };
     
+    //Add listener?
+    //launchLaterButton.addListener(this);
      
     
     //Attach
@@ -73,14 +81,15 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     //launchButton0.onClick = [&]() { this->trainModel3(); } ;
     //====Timer setup
     
-    //----Init countdown timer
-    countdownTime = 10;
+    
+    
     
 
 }
 
 MeterComponent::~MeterComponent()
 {
+    Timer::stopTimer();
 }
 
 void MeterComponent::paint (Graphics& g)
@@ -182,7 +191,6 @@ void MeterComponent::resized()
     
     flexbox.items.add (FlexItem(100,100, launchLaterButton) );
     
-    
     if (sliderBool)
         indicatorSlider.setBounds(area.removeFromBottom(3000));
     
@@ -207,7 +215,6 @@ void MeterComponent::tempoChanged()
         // Calculate tempo based on interval:
         
         //smoothTempo.setTargetValue ( 60.0f / beatInterval );
-        
         
         float tempoFloat = 60.0f / beatInterval;
 
@@ -241,7 +248,6 @@ void MeterComponent::setSliderValues(int _centralBPM)
     
     std::string question = "?";
     
-    
     int lowerLimit = centralBPM - 5;
     
     int upperLimit = centralBPM + 5;
@@ -267,14 +273,17 @@ void MeterComponent::setSliderStrings(float value)
     
 }
 
-void MeterComponent::runCountdown()
+void MeterComponent::runSlider()
 {
-    if (countdownState == CountdownState::Stop)
+    if (sliderState == SliderState::Invis)
     {
-        countdownState = CountdownState::Run;
-        DBG("Run");
+        sliderState = SliderState::Vis;
+        DBG("Vis");
         //run the countdown timer.
         //Timer::startTimerHz (1);
+        addAndMakeVisible (&indicatorSlider);
+        
+        //processor.runState = running
         
     }
 }
@@ -288,6 +297,7 @@ void MeterComponent::timerCallback()
 
 void MeterComponent::testFunction()
 {
-    
-    DBG( "Test" );
+    DBG("Test Function");
 }
+
+
