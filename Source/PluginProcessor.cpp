@@ -11,6 +11,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+
 //==============================================================================
 BpmometerAudioProcessor::BpmometerAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -21,7 +23,9 @@ BpmometerAudioProcessor::BpmometerAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+mAPVTS(*this, nullptr, "PARAMETERS",
+       createParameterLayout() )
 #endif
 {
 }
@@ -29,6 +33,32 @@ BpmometerAudioProcessor::BpmometerAudioProcessor()
 BpmometerAudioProcessor::~BpmometerAudioProcessor()
 {
 }
+
+//==============================================================================
+
+AudioProcessorValueTreeState::ParameterLayout BpmometerAudioProcessor::createParameterLayout()
+{
+    //Create parameterlayout gets used as an argument for treeState at the top of this file (scroll up)
+    
+    
+    // Making a vector of audioParameter unique pointers:
+    std::vector <std::unique_ptr <RangedAudioParameter> > params;
+    
+    auto launchLaterButtonParam = std::make_unique<AudioParameterBool> (LAUNCH_LATER_ID,
+                                                                  LAUNCH_LATER_NAME,
+                                                                  false);
+    
+    auto launchNowButtonParam = std::make_unique<AudioParameterBool> (LAUNCH_NOW_ID,
+                                                                        LAUNCH_NOW_NAME,
+                                                                        false);
+    
+    params.push_back (std::move (launchLaterButtonParam));
+    params.push_back (std::move (launchNowButtonParam));
+    
+    return { params.begin(), params.end() };
+    
+}
+
 
 //==============================================================================
 const String BpmometerAudioProcessor::getName() const

@@ -13,6 +13,12 @@
 #include <JuceHeader.h>
 #include "BTrack.h"
 
+#define LAUNCH_LATER_ID "launchLaterButton"
+#define LAUNCH_LATER_NAME "LaunchLaterButton"
+
+#define LAUNCH_NOW_ID "launchNowButton"
+#define LAUNCH_NOW_NAME "LaunchNowButton"
+
 //==============================================================================
 /**
 */
@@ -68,6 +74,7 @@ public:
     
     double getTimeGrab();
     
+    AudioProcessorValueTreeState& getAPVTS() {return mAPVTS;};
                        
 private:
     
@@ -104,6 +111,11 @@ private:
     AudioBuffer<double> tempBuffer;
     
     //std::vector<double> timez;
+    //=============================
+    
+    AudioProcessorValueTreeState mAPVTS;
+    
+    AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BpmometerAudioProcessor)
 };

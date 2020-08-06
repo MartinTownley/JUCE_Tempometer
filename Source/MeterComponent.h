@@ -79,7 +79,9 @@ public:
 //==============================================================================
 /*
 */
-class MeterComponent    : public Component
+class MeterComponent    : public Component,
+                        public Timer
+
 {
 public:
     MeterComponent(BpmometerAudioProcessor&);
@@ -91,7 +93,7 @@ public:
     
     void resized() override;
     
-    void passBPM(float bpmValue);
+    
     
     void setSliderStrings(float value);
     
@@ -105,7 +107,13 @@ public:
         return refreshRate;
     }
     
-     
+    void runCountdown();
+    
+    void timerCallback() override;
+    
+    void testFunction();
+    
+    //static void JUCE_CALLTYPE Timer::callAfterDe
 
 private:
     
@@ -125,20 +133,43 @@ private:
                 
     //float _theTempo; //the value displayed and given to the slider.
     
-    //float roundedDown;
-    
     int centralBPM; // this is the 12 o'clock BPM.
     
     int refreshRate { 60 };
     
     int bpmRange; //range for the slider, +/- the target.
     
-    //int upperLimit;
+    //====== Button
     
-    //int lowerLimit;
+    TextButton launchLaterButton {"Launch Later"};
     
-    TextButton header;
+    int buttonDelayTime;
     
+    std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchLaterAttach;
+    
+    //-------- Button enum
+    
+    enum class CountdownState
+    {
+        Run,
+        Stop
+    };
+    //-------- CountdownState object
+    
+    CountdownState countdownState { CountdownState::Stop }; //default
+    
+    TextButton launchNowButton { "Launch Now" };
+    
+    int countdownTime;
+    
+    
+    std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchNowAttach;
+    
+    //========
+    
+    bool sliderBool; //flips to make the slider appear.
+    
+    //========
     std::string centralString;
     
     std::string sliderString;

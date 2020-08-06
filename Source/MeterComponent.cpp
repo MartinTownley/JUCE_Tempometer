@@ -35,15 +35,46 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     //this->setCentralString("?");
     
-    
-    
     previousBeatTime = 0;
     
     beatInterval = 0;
     
-    //
+    
     smoothTempo.reset(refreshRate, 0.3); //same callbackTimer rate.
     
+    sliderBool = true;
+    
+    //====================
+    //-----launch buttons
+    
+    
+    launchLaterButton.setColour(TextButton::buttonColourId, Colours::lightyellow);
+    launchLaterButton.setColour(TextButton::textColourOffId, Colours::black);
+    
+    launchLaterButton.setToggleState(false, NotificationType::dontSendNotification);
+    
+    //launchLaterButton.onClick = [this]() {runCountdown(); };
+    
+    launchLaterDelayTime = 5;
+    // Button has a delay
+    launchLaterButton.onClick = [this]() {
+        Timer::callAfterDelay (buttonDelayTime * 1000, [this](){ this->testFunction() ; } );
+    };
+    
+     
+    
+    //Attach
+    addAndMakeVisible(&launchLaterButton);
+    
+    //launchLaterButton.addListener(this);
+    
+    launchLaterAttach = std::make_unique <AudioProcessorValueTreeState::ButtonAttachment> (processor.getAPVTS(), LAUNCH_LATER_ID, launchLaterButton);
+    
+    //launchButton0.onClick = [&]() { this->trainModel3(); } ;
+    //====Timer setup
+    
+    //----Init countdown timer
+    countdownTime = 10;
     
 
 }
@@ -61,6 +92,8 @@ void MeterComponent::paint (Graphics& g)
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
     
     //======== slider
+    
+    
     auto area = getLocalBounds();
     
     auto radius =  540;
@@ -136,41 +169,29 @@ void MeterComponent::paint (Graphics& g)
 
 void MeterComponent::resized()
 {
+    
+    
+    
     //============
     auto area = getLocalBounds();
 
     //============
     auto indiSliderHeight = 2000;
 
-    indicatorSlider.setBounds(area.removeFromBottom(3000));
+    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::stretch, FlexBox::AlignItems::stretch, FlexBox::JustifyContent::flexStart};
+    
+    flexbox.items.add (FlexItem(100,100, launchLaterButton) );
+    
+    
+    if (sliderBool)
+        indicatorSlider.setBounds(area.removeFromBottom(3000));
+    
+    flexbox.performLayout(area);
+    
+    //launchLaterButton.setBounds(100, 100, 100, 100);
 }
 
-void MeterComponent::passBPM(float bpmValue)
-{
-    //meterBPM is a float
-    
-    //_theTempo = bpmValue; //this goes to the slider.
-    
-    //DBG(_theTempo);
-    //bpmInt = roundToInt(meterBPM);
-    
-    
-    //rounded_down = floorf(meterBPM * 100) / 100;   /* Result: 37.77 */
-    
-    //    double rounded_down = floorf(_tempo * 100) / 100;
-    //
-    //    int tempoInt = roundToInt(_tempo);
-    
-    
-    
-    //lowerLimit = centralBPM - 5;
-    
-    //upperLimit = centralBPM + 5;
-    
-    
-    
-    
-}
+
 
 void MeterComponent::tempoChanged()
 {
@@ -207,6 +228,8 @@ void MeterComponent::tempoChanged()
     
     repaint();
     
+    
+    
 }
 
 void MeterComponent::setSliderValues(int _centralBPM)
@@ -242,4 +265,29 @@ void MeterComponent::setSliderStrings(float value)
     //sliderString = std::to_string ( _theTempo );
     
     
+}
+
+void MeterComponent::runCountdown()
+{
+    if (countdownState == CountdownState::Stop)
+    {
+        countdownState = CountdownState::Run;
+        DBG("Run");
+        //run the countdown timer.
+        //Timer::startTimerHz (1);
+        
+    }
+}
+
+void MeterComponent::timerCallback()
+{
+    //DBG ("countup : " << Timer::getTimerInterval() );
+    //countdownTime --;
+    //DBG(countdownTime);
+}
+
+void MeterComponent::testFunction()
+{
+    
+    DBG( "Test" );
 }
