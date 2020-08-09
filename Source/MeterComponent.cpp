@@ -25,15 +25,10 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
-    //indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
-    //addAndMakeVisible (&indicatorSlider);
-    
     //======
     //RANGE:
-    //this->initSliderValues(100);
-    //======
     
-    //this->setCentralString("?");
+    //======
     
     previousBeatTime = 0;
     
@@ -55,36 +50,29 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     
     
-    buttonDelaySecs = 2;
+    buttonDelaySecs = 10;
     
-    // LaunchLater Button has a delay
+    //LaunchLater Button has a delay
+    
     launchLaterButton.onClick = [this]() {
-        Timer::callAfterDelay (buttonDelaySecs * 1000, [this](){ this->runSlider() ; } );
+        Timer::callAfterDelay (buttonDelaySecs * 1000, [this]
+        {
+            this->initialiseSlider();
+            
+            this->runSlider();
+            //this->setIntentionBPMString("lambda");
+        } );
         
-        this->testFunction();
+        //this->testFunction();
         
-        //Another function that happens immediately - running the beat tracker.
+        //Immedtiate action happens in buttonClicked callback function.
         
     };
     
-    //Add listener?
-    //launchLaterButton.addListener(this);
-     
-    
-    //Attach
     addAndMakeVisible(&launchLaterButton);
     
-    //launchLaterButton.addListener(this);
+    launchLaterButton.addListener(this);
     
-    launchLaterAttach = std::make_unique <AudioProcessorValueTreeState::ButtonAttachment> (processor.getAPVTS(), LAUNCH_LATER_ID, launchLaterButton);
-    
-    //launchButton0.onClick = [&]() { this->trainModel3(); } ;
-    //====Timer setup
-    
-    
-    
-    
-
 }
 
 MeterComponent::~MeterComponent()
@@ -160,18 +148,31 @@ void MeterComponent::paint (Graphics& g)
     g.restoreState();
     
     
-    //========== slider string
+    //========== indicator string
     g.setColour (Colours::white);
     g.setFont (40.0f);
     
-    //setSliderString();
     
-    g.drawFittedText (sliderString, getLocalBounds(), Justification::centred, 1);
+    //g.drawText("Hello", 200, 100, 50, 50, Justification::centred);
+    g.drawFittedText (indicatorString, getLocalBounds(), Justification::centred, 1);
     
     
-    //============== CENTRAL ==============
+    //============== INTENTION STRING ==============
     g.setFont (30.0f);
-    g.drawFittedText(centralString, getWidth()/2 - 25, getWidth()/10, 50, 50, Justification::centred, 1);
+    
+    
+    
+    g.drawFittedText (intentionString,
+                     getWidth()/2 - 25,
+                     getHeight()/6,
+                     50,
+                     50,
+                     Justification::centred,
+                     1);
+    
+    //g.drawFittedText
+    //debugging:
+    
     
     
 }
@@ -218,9 +219,11 @@ void MeterComponent::tempoChanged()
         
         float tempoFloat = 60.0f / beatInterval;
 
-        int tempoInt = roundToInt(tempoFloat);
+        tempoInt = roundToInt(tempoFloat);
 
         smoothTempo.setTargetValue ( tempoInt );
+        
+        DBG(tempoInt);
         
     }
     
@@ -229,7 +232,7 @@ void MeterComponent::tempoChanged()
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
     
-    setSliderStrings( indicatorSlider.getValue()  );
+    setIndicatorString( indicatorSlider.getValue()  );
    
     previousBeatTime = currentBeatTime;
     
@@ -239,35 +242,35 @@ void MeterComponent::tempoChanged()
     
 }
 
-void MeterComponent::setSliderValues(int _centralBPM)
+void MeterComponent::setSliderRange(int _intentionBPM)
 {
-    // Funciton gets called in constructor.
-    centralBPM = _centralBPM;
+    
+    intentionBPM = _intentionBPM;
     
     //centralString = std::to_string ( centralBPM );
     
     std::string question = "?";
     
-    int lowerLimit = centralBPM - 5;
+    int lowerLimit = intentionBPM - 5;
     
-    int upperLimit = centralBPM + 5;
+    int upperLimit = intentionBPM + 5;
     
     indicatorSlider.setRange (lowerLimit, upperLimit);
     
     
 }
 
-void MeterComponent::setCentralString(std::string string)
+void MeterComponent::setIntentionBPMString(int _value)
 {
-    centralString = string;
+    intentionString = std::to_string (_value);
 }
 
-void MeterComponent::setSliderStrings(float value)
+void MeterComponent::setIndicatorString(float value)
 {
     
     
     //======== slider value string=======
-    sliderString = std::to_string (roundToInt ( value ) );
+    indicatorString = std::to_string (roundToInt ( value ) );
     //sliderString = std::to_string ( _theTempo );
     
     
@@ -280,12 +283,19 @@ void MeterComponent::runSlider()
         sliderState = SliderState::Vis;
         DBG("Vis");
         //run the countdown timer.
-        //Timer::startTimerHz (1);
+        
+        Timer::startTimerHz (1);
         addAndMakeVisible (&indicatorSlider);
         
-        //processor.runState = running
+       
         
     }
+}
+
+void MeterComponent::initialiseSlider()
+{
+    setSliderRange ( tempoInt );
+    setIntentionBPMString ( tempoInt );
 }
 
 void MeterComponent::timerCallback()
@@ -293,11 +303,22 @@ void MeterComponent::timerCallback()
     //DBG ("countup : " << Timer::getTimerInterval() );
     //countdownTime --;
     //DBG(countdownTime);
+    //DBG(  indicatorSlider.getMaximum () ) ;
 }
 
 void MeterComponent::testFunction()
 {
-    DBG("Test Function");
+    //DBG("Test Function");
+}
+
+void MeterComponent::buttonClicked (Button* inButton)
+{
+    if (inButton == &launchLaterButton)
+    {
+        processor.testButton();
+        
+        
+    }
 }
 
 

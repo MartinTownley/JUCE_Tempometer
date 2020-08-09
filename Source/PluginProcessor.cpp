@@ -44,15 +44,15 @@ AudioProcessorValueTreeState::ParameterLayout BpmometerAudioProcessor::createPar
     // Making a vector of audioParameter unique pointers:
     std::vector <std::unique_ptr <RangedAudioParameter> > params;
     
-    auto launchLaterButtonParam = std::make_unique<AudioParameterBool> (LAUNCH_LATER_ID,
-                                                                  LAUNCH_LATER_NAME,
-                                                                  false);
+//    auto launchLaterButtonParam = std::make_unique<AudioParameterBool> (LAUNCH_LATER_ID,
+//                                                                  LAUNCH_LATER_NAME,
+//                                                                  false);
     
     auto launchNowButtonParam = std::make_unique<AudioParameterBool> (LAUNCH_NOW_ID,
                                                                         LAUNCH_NOW_NAME,
                                                                         false);
     
-    params.push_back (std::move (launchLaterButtonParam));
+    //params.push_back (std::move (launchLaterButtonParam));
     params.push_back (std::move (launchNowButtonParam));
     
     return { params.begin(), params.end() };
@@ -143,6 +143,7 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     tempBuffer.setSize(1, chunkSize);// 512
     
+    runState = RunState::Stopped;
 }
 
 void BpmometerAudioProcessor::releaseResources()
@@ -191,7 +192,12 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
     tempBuffer.clear();
     
-    //runBeatTracker( buffer );
+    runBeatTracker( buffer );
+    
+    //DBG( mAPVTS.getRawParameterValue(LAUNCH_LATER_ID)->load() );
+    
+    
+    //std::cout << onOff << std::endl;
     
 }
 
@@ -199,36 +205,37 @@ void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
 {
     //DBG("BT running");
     
-    if (runState == RunState::Stopped)
+    if (runState == RunState::Running)
     {
-        runState = RunState::Running;
         
-    }
+        //DBG ("P.running");
     
-    for (int i = 0; i < division; ++i) // [1]
-    {
-        
-        auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
-        
-        auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
-        
-        for (int samp = 0; samp < chunkSize; ++samp)
+        for (int i = 0; i < division; ++i) // [1]
         {
-            tempBuffWriter[samp] = buffReader[samp]; // [4]
-        }
         
-        tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
+            auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
         
-        if (tracker.beatDueInCurrentFrame() == true)
-        {
-            beatCount ++;
-            
-            updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
+            auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
+        
+            for (int samp = 0; samp < chunkSize; ++samp)
+            {
+                tempBuffWriter[samp] = buffReader[samp]; // [4]
+            }
+        
+            tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
+        
+            if (tracker.beatDueInCurrentFrame() == true)
+            {
+                beatCount ++;
+                
+                updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
                                                           myHop,
                                                           sr) ); // [6]
+            }
+            frameCount ++; // [7]
         }
-        frameCount ++; // [7]
-    }
+        
+    } //end of if statement
 }
 
 void BpmometerAudioProcessor::updateBeatTime(double _value)
@@ -269,6 +276,18 @@ void BpmometerAudioProcessor::setStateInformation (const void* data, int sizeInB
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 }
+
+void BpmometerAudioProcessor::testButton()
+{
+    //onOff = mAPVTS.getRawParameterValue(LAUNCH_LATER_ID)->load();
+    DBG ("button pressed");
+    if (runState == RunState::Stopped)
+    {
+        runState = RunState::Running;
+    }
+}
+
+
 
 //==============================================================================
 // This creates new instances of the plugin..

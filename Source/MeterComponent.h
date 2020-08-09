@@ -79,8 +79,9 @@ public:
 //==============================================================================
 /*
 */
-class MeterComponent    : public Component,
-                        public Timer
+class MeterComponent    :   public Component,
+                            public Timer,
+                            public TextButton::Listener
 
 {
 public:
@@ -94,26 +95,41 @@ public:
     void resized() override;
     
     
+    /** Takes argument, rounds it to an int, converts value to a string, and sets that to the current slider value that is drawn on the screen
+     * @param value the slider value to be converted to a string
+     */
+    void setIndicatorString(float value);
     
-    void setSliderStrings(float value);
+    /** Sets the intention string, a string of the intention BPM value, drawn at 12'oclock in relation to the slider
+     * @param string the string to be drawn
+     */
+    void setIntentionBPMString(int _value);
     
-    void setCentralString(std::string string);
+    /** Sets the lower-and-upper limits of the slider
+     * @param intentionBPM the "12 o'clock" target BPM that the musician wishes to maintain
+     */
+    void setSliderRange(int _intentionBPM);
     
-    void setSliderValues(int _centralBPM);
-    
+    /** Checks if beat time has changed, makes appropriate tempo calculations if so. Sets indicatorSlider value accordingly, and calls setSliderStrings */
     void tempoChanged();
     
+    /** Allows the refresh rate to be seen by other components, so that they can sync their timer callbacks */
     int getRefreshRate(){
         return refreshRate;
     }
     
+    /** Makes the slider visible */
     void runSlider();
+    
+    void initialiseSlider();
+    
     
     void timerCallback() override;
     
     void testFunction();
     
-    //static void JUCE_CALLTYPE Timer::callAfterDe
+    void buttonClicked (Button*) override;
+    
 
 private:
     
@@ -133,19 +149,20 @@ private:
                 
     //float _theTempo; //the value displayed and given to the slider.
     
-    int centralBPM; // this is the 12 o'clock BPM.
+    int intentionBPM; // this is the 12 o'clock BPM.
     
     int refreshRate { 60 };
     
     int bpmRange; //range for the slider, +/- the target.
     
+    int tempoInt;
     //====== Button
     
     TextButton launchLaterButton {"Launch Later"};
     
     int buttonDelaySecs;
     
-    std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchLaterAttach;
+    //std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchLaterAttach;
     
     //-------- Button enum
     
@@ -170,9 +187,9 @@ private:
     bool sliderBool; //flips to make the slider appear.
     
     //========
-    std::string centralString;
+    std::string intentionString;
     
-    std::string sliderString;
+    std::string indicatorString;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BpmometerAudioProcessor& processor;

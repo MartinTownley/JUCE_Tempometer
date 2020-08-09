@@ -75,6 +75,10 @@ public:
     double getTimeGrab();
     
     AudioProcessorValueTreeState& getAPVTS() {return mAPVTS;};
+    
+    void testButton();
+    
+    
                        
 private:
     
@@ -109,15 +113,19 @@ private:
     AudioBuffer<double> tempBuffer;
     
     //RunState enum for the beat tracker:
+    
+    // RunState instance:
+     //default is stopped
+    
     enum class RunState
     {
         Running,
         Stopped
     };
-    // RunState instance:
-    RunState runState; //default is stopped
     
-    //std::vector<double> timez;
+    RunState runState;
+    
+    
     //=============================
     
     AudioProcessorValueTreeState mAPVTS;
