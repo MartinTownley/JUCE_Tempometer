@@ -90,7 +90,7 @@ private:
     
     int beatCount;
     
-    int myHop = 64;
+    int myHop = 32;
     
     //int trackBufferSize = myHop * 2;
     

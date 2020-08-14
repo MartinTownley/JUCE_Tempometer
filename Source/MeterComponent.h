@@ -23,6 +23,8 @@ public:
         
     }
     
+    
+    
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                       const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider) override
     {
@@ -72,9 +74,21 @@ public:
         Point<float> thumbPoint (bounds.getCentreX() + arcRadius * std::cos (toAngle - MathConstants<float>::halfPi),
                                  bounds.getCentreY() + arcRadius * std::sin (toAngle - MathConstants<float>::halfPi));
         
-        g.setColour (Colours::mediumpurple);
+        g.setColour (ellipseColour);
+        
         g.fillEllipse (Rectangle<float> (thumbWidth, thumbWidth).withCentre (thumbPoint));
+    
     }
+    
+    void setEllipseColour (juce::Colour colour)
+    {
+        
+        ellipseColour = colour;
+        //DBG("ding ding");
+    }
+private:
+    Colour ellipseColour;
+    
 };
 //==============================================================================
 /*
@@ -86,11 +100,12 @@ class MeterComponent    :   public Component,
 {
 public:
     MeterComponent(BpmometerAudioProcessor&);
+    
     ~MeterComponent();
 
     void paint (Graphics&) override;
     
-    void paintCircle (int radius);
+    //void paintCircle (int radius);
     
     void resized() override;
     
@@ -156,13 +171,15 @@ private:
     int bpmRange; //range for the slider, +/- the target.
     
     int tempoInt;
-    //====== Button
+    //====== Buttons
     
-    TextButton launchLaterButton {"Launch Later"};
+    TextButton launchLaterButton {"Run Later"};
+    
+    TextButton launchNowButton { "Run Now" };
     
     int buttonDelaySecs;
     
-    //std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchLaterAttach;
+    
     
     //-------- Button enum
     
@@ -175,12 +192,7 @@ private:
     
     SliderState sliderState { SliderState::Invis }; //default
     
-    TextButton launchNowButton { "Launch Now" };
     
-    
-    
-    
-    std::unique_ptr <AudioProcessorValueTreeState::ButtonAttachment> launchNowAttach;
     
     //========
     
@@ -190,8 +202,17 @@ private:
     std::string intentionString;
     
     std::string indicatorString;
+    
+private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BpmometerAudioProcessor& processor;
+    
+    
+    
+    
+    
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterComponent)
 };

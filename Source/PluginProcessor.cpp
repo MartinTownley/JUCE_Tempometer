@@ -194,22 +194,17 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
     runBeatTracker( buffer );
     
-    //DBG( mAPVTS.getRawParameterValue(LAUNCH_LATER_ID)->load() );
     
-    
-    //std::cout << onOff << std::endl;
     
 }
 
 void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
 {
-    //DBG("BT running");
+   
     
     if (runState == RunState::Running)
     {
         
-        //DBG ("P.running");
-    
         for (int i = 0; i < division; ++i) // [1]
         {
         
@@ -224,13 +219,16 @@ void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
         
             tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
         
+            
             if (tracker.beatDueInCurrentFrame() == true)
             {
                 beatCount ++;
                 
                 updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
-                                                          myHop,
-                                                          sr) ); // [6]
+                                                              myHop,
+                                                              sr) ); // [6]
+                
+                
             }
             frameCount ++; // [7]
         }

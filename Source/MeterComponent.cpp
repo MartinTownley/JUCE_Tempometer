@@ -25,8 +25,8 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
-    //======
-    //RANGE:
+    
+    altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     
     //======
     
@@ -42,7 +42,12 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     //====================
     //-----launch buttons
     
+    launchNowButton.setColour(TextButton::buttonColourId, Colours::black);
+    launchNowButton.setColour(TextButton::textColourOffId, Colours::white);
     
+    launchNowButton.setToggleState(false, NotificationType::dontSendNotification);
+    
+    //----------
     launchLaterButton.setColour(TextButton::buttonColourId, Colours::lightyellow);
     launchLaterButton.setColour(TextButton::textColourOffId, Colours::black);
     
@@ -50,27 +55,39 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     
     
-    buttonDelaySecs = 10;
+    buttonDelaySecs = 5;
     
     //LaunchLater Button has a delay
     
     launchLaterButton.onClick = [this]() {
+        
+        processor.testButton();
+        
         Timer::callAfterDelay (buttonDelaySecs * 1000, [this]
         {
             this->initialiseSlider();
             
             this->runSlider();
-            //this->setIntentionBPMString("lambda");
+            
+            
         } );
-        
-        //this->testFunction();
-        
-        //Immedtiate action happens in buttonClicked callback function.
         
     };
     
+    launchNowButton.onClick = [this]() {
+        DBG ("nowNow");
+        
+        //processor.testButton();
+        this->initialiseSlider();
+        this->runSlider();
+        
+    };
+    
+    
+    addAndMakeVisible(&launchNowButton);
     addAndMakeVisible(&launchLaterButton);
     
+    launchNowButton.addListener(this);
     launchLaterButton.addListener(this);
     
 }
@@ -191,6 +208,7 @@ void MeterComponent::resized()
     FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::stretch, FlexBox::AlignItems::stretch, FlexBox::JustifyContent::flexStart};
     
     flexbox.items.add (FlexItem(100,100, launchLaterButton) );
+    flexbox.items.add (FlexItem(100,100, launchNowButton) );
     
     if (sliderBool)
         indicatorSlider.setBounds(area.removeFromBottom(3000));
@@ -215,15 +233,25 @@ void MeterComponent::tempoChanged()
         
         // Calculate tempo based on interval:
         
-        //smoothTempo.setTargetValue ( 60.0f / beatInterval );
-        
         float tempoFloat = 60.0f / beatInterval;
 
+        // Round to integer:
         tempoInt = roundToInt(tempoFloat);
 
+        // Smooth the value:
         smoothTempo.setTargetValue ( tempoInt );
         
-        DBG(tempoInt);
+        //DBG(tempoInt);
+        
+        //DBG( indicatorSlider.getMinimum() );
+        
+        if (tempoInt < indicatorSlider.getMinimum()
+            || tempoInt > indicatorSlider.getMaximum() )
+        {
+            altLookAndFeel.setEllipseColour(juce::Colours::red);
+        } else {
+            altLookAndFeel.setEllipseColour(juce::Colours::mediumpurple);
+        }
         
     }
     
@@ -232,9 +260,13 @@ void MeterComponent::tempoChanged()
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
     
-    setIndicatorString( indicatorSlider.getValue()  );
+    //setIndicatorString( indicatorSlider.getValue()  );
    
+    setIndicatorString( tempoInt );
+    
     previousBeatTime = currentBeatTime;
+    
+    
     
     repaint();
     
@@ -281,7 +313,7 @@ void MeterComponent::runSlider()
     if (sliderState == SliderState::Invis)
     {
         sliderState = SliderState::Vis;
-        DBG("Vis");
+        //DBG("Vis");
         //run the countdown timer.
         
         Timer::startTimerHz (1);
@@ -315,9 +347,7 @@ void MeterComponent::buttonClicked (Button* inButton)
 {
     if (inButton == &launchLaterButton)
     {
-        processor.testButton();
-        
-        
+        //processor.testButton();
     }
 }
 
