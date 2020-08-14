@@ -34,8 +34,13 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     beatInterval = 0;
     
+    rampLength = 0.3;
+    refreshRate = 60;
     
-    smoothTempo.reset(refreshRate, 0.3); //same callbackTimer rate.
+    smoothTempo.reset(refreshRate, rampLength); //same callbackTimer rate.
+    
+    
+    
     
     sliderBool = true;
     
@@ -228,20 +233,36 @@ void MeterComponent::tempoChanged()
     // If the beat time changes, calculate the beatInterval:
     if(currentBeatTime != previousBeatTime)
     {
+        
+        //DBG(currentBeatTime - previousBeatTime);
+        //DBG("Slider: "<< indicatorSlider.getValue() );
         // Calculate beat interval based on current and previous beat times:
         beatInterval = (currentBeatTime - previousBeatTime);
         
         // Calculate tempo based on interval:
         
         float tempoFloat = 60.0f / beatInterval;
+        
+        //DBG("TempoFloat: " << tempoFloat);
 
         // Round to integer:
         tempoInt = roundToInt(tempoFloat);
+        
+        //DBG("TempoInt: " << tempoInt);
+        
+        //
+        DBG( abs ( tempoInt - indicatorSlider.getValue() ) );
+        
+        auto difference = abs (tempoInt - indicatorSlider.getValue() );
+        
+        smoothTempo.reset (refreshRate, rampLength * difference );
 
         // Smooth the value:
         smoothTempo.setTargetValue ( tempoInt );
         
-        //DBG(tempoInt);
+       
+        
+        
         
         //DBG( indicatorSlider.getMinimum() );
         

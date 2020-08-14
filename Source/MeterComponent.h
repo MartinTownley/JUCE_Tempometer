@@ -166,7 +166,9 @@ private:
     
     int intentionBPM; // this is the 12 o'clock BPM.
     
-    int refreshRate { 60 };
+    int refreshRate;
+    
+    float rampLength;
     
     int bpmRange; //range for the slider, +/- the target.
     
@@ -203,7 +205,7 @@ private:
     
     std::string indicatorString;
     
-private:
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BpmometerAudioProcessor& processor;
