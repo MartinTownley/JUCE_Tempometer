@@ -29,6 +29,8 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
     
+    
+    
     altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     
     //======
@@ -206,17 +208,27 @@ void MeterComponent::resized()
 {
     auto bounds = getLocalBounds();
     if (sliderBool)
-        indicatorSlider.setBounds(bounds.removeFromBottom(3000));
+        indicatorSlider.setBounds(bounds.removeFromBottom(1000));
+    
+    
+//    auto bounds2 = getLocalBounds();
+//
+//    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
+//
+//    flexbox.items.add (FlexItem(200,75, launchLaterButton) );
+//    flexbox.items.add (FlexItem(200,75, launchNowButton) );
+//
+//    flexbox.performLayout(bounds2.removeFromBottom(200) );
+
+    launchLaterButton.setBounds (50,100,150,75);
+    
+    launchNowButton.setBounds (getWidth()-200, 100, 150,75);
+
+    
+    
     
     //============
-    auto bounds2 = getLocalBounds();
-
-    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
-
-    flexbox.items.add (FlexItem(200,75, launchLaterButton) );
-    flexbox.items.add (FlexItem(200,75, launchNowButton) );
     
-    flexbox.performLayout(bounds2.removeFromBottom(400) );
 
 }
 
@@ -271,7 +283,7 @@ void MeterComponent::tempoChanged()
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
     
-    setIndicatorString( tempoInt );
+    setIndicatorString( _theTempo );
     
     previousBeatTime = currentBeatTime;
     

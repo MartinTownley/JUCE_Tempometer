@@ -138,10 +138,7 @@ public:
     
     void initialiseSlider();
     
-    
     void timerCallback() override;
-    
-    
     
     void buttonClicked (Button*) override;
     
