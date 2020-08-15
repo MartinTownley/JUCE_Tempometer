@@ -275,7 +275,7 @@ void BpmometerAudioProcessor::setStateInformation (const void* data, int sizeInB
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void BpmometerAudioProcessor::testButton()
+void BpmometerAudioProcessor::runStateChanged()
 {
     //onOff = mAPVTS.getRawParameterValue(LAUNCH_LATER_ID)->load();
     DBG ("button pressed");

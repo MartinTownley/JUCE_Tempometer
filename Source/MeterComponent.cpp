@@ -29,9 +29,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
     
-    
-    
-    altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
+altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     
     //======
     
@@ -70,8 +68,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     launchLaterButton.onClick = [this]() {
         
-        DBG("later");
-        processor.testButton();
+        processor.runStateChanged();
         
         Timer::callAfterDelay (buttonDelaySecs * 1000, [this]
         {
