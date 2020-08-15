@@ -141,7 +141,7 @@ public:
     
     void timerCallback() override;
     
-    void testFunction();
+    
     
     void buttonClicked (Button*) override;
     
@@ -175,9 +175,9 @@ private:
     int tempoInt;
     //====== Buttons
     
-    TextButton launchLaterButton {"Run Later"};
+    TextButton launchLaterButton {"Run Tempo-Tracker and Set Target BPM"};
     
-    TextButton launchNowButton { "Run Now" };
+    TextButton launchNowButton { "Reset Target to Current BPM" };
     
     int buttonDelaySecs;
     
@@ -209,12 +209,6 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BpmometerAudioProcessor& processor;
-    
-    
-    
-    
-    
-    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterComponent)
 };

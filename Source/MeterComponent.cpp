@@ -13,7 +13,10 @@
 
 //==============================================================================
 MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
+
 {
+    
+    //indicatorString = " ";
     
     indicatorSlider.setLookAndFeel (&altLookAndFeel);
     
@@ -39,25 +42,24 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     smoothTempo.reset(refreshRate, rampLength); //same callbackTimer rate.
     
-    
-    
-    
     sliderBool = true;
     
     //====================
     //-----launch buttons
     
-    launchNowButton.setColour(TextButton::buttonColourId, Colours::black);
+    
+    
+    //----------
+    launchLaterButton.setColour(TextButton::buttonColourId, Colours::grey);
+    launchLaterButton.setColour(TextButton::textColourOffId, Colours::white);
+    
+    launchLaterButton.setToggleState(false, NotificationType::dontSendNotification);
+    //---------
+    
+    launchNowButton.setColour(TextButton::buttonColourId, Colours::grey);
     launchNowButton.setColour(TextButton::textColourOffId, Colours::white);
     
     launchNowButton.setToggleState(false, NotificationType::dontSendNotification);
-    
-    //----------
-    launchLaterButton.setColour(TextButton::buttonColourId, Colours::lightyellow);
-    launchLaterButton.setColour(TextButton::textColourOffId, Colours::black);
-    
-    launchLaterButton.setToggleState(false, NotificationType::dontSendNotification);
-    
     
     
     buttonDelaySecs = 5;
@@ -66,6 +68,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     launchLaterButton.onClick = [this]() {
         
+        DBG("later");
         processor.testButton();
         
         Timer::callAfterDelay (buttonDelaySecs * 1000, [this]
@@ -87,7 +90,6 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
         this->runSlider();
         
     };
-    
     
     addAndMakeVisible(&launchNowButton);
     addAndMakeVisible(&launchLaterButton);
@@ -176,6 +178,8 @@ void MeterComponent::paint (Graphics& g)
     
     
     //g.drawText("Hello", 200, 100, 50, 50, Justification::centred);
+    
+    
     g.drawFittedText (indicatorString, getLocalBounds(), Justification::centred, 1);
     
     
@@ -192,8 +196,7 @@ void MeterComponent::paint (Graphics& g)
                      Justification::centred,
                      1);
     
-    //g.drawFittedText
-    //debugging:
+  
     
     
     
@@ -201,26 +204,20 @@ void MeterComponent::paint (Graphics& g)
 
 void MeterComponent::resized()
 {
-    
-    
-    
-    //============
-    auto area = getLocalBounds();
-
-    //============
-    auto indiSliderHeight = 2000;
-
-    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::stretch, FlexBox::AlignItems::stretch, FlexBox::JustifyContent::flexStart};
-    
-    flexbox.items.add (FlexItem(100,100, launchLaterButton) );
-    flexbox.items.add (FlexItem(100,100, launchNowButton) );
-    
+    auto bounds = getLocalBounds();
     if (sliderBool)
-        indicatorSlider.setBounds(area.removeFromBottom(3000));
+        indicatorSlider.setBounds(bounds.removeFromBottom(3000));
     
-    flexbox.performLayout(area);
+    //============
+    auto bounds2 = getLocalBounds();
+
+    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
+
+    flexbox.items.add (FlexItem(200,75, launchLaterButton) );
+    flexbox.items.add (FlexItem(200,75, launchNowButton) );
     
-    //launchLaterButton.setBounds(100, 100, 100, 100);
+    flexbox.performLayout(bounds2.removeFromBottom(400) );
+
 }
 
 
@@ -248,10 +245,7 @@ void MeterComponent::tempoChanged()
         // Round to integer:
         tempoInt = roundToInt(tempoFloat);
         
-        //DBG("TempoInt: " << tempoInt);
         
-        //
-        DBG( abs ( tempoInt - indicatorSlider.getValue() ) );
         
         auto difference = abs (tempoInt - indicatorSlider.getValue() );
         
@@ -260,11 +254,7 @@ void MeterComponent::tempoChanged()
         // Smooth the value:
         smoothTempo.setTargetValue ( tempoInt );
         
-       
-        
-        
-        
-        //DBG( indicatorSlider.getMinimum() );
+       //DBG( indicatorSlider.getMinimum() );
         
         if (tempoInt < indicatorSlider.getMinimum()
             || tempoInt > indicatorSlider.getMaximum() )
@@ -281,13 +271,9 @@ void MeterComponent::tempoChanged()
     indicatorSlider.setValue( _theTempo );
     //DBG( "smoothed: " << smoothed );
     
-    //setIndicatorString( indicatorSlider.getValue()  );
-   
     setIndicatorString( tempoInt );
     
     previousBeatTime = currentBeatTime;
-    
-    
     
     repaint();
     
@@ -324,8 +310,6 @@ void MeterComponent::setIndicatorString(float value)
     
     //======== slider value string=======
     indicatorString = std::to_string (roundToInt ( value ) );
-    //sliderString = std::to_string ( _theTempo );
-    
     
 }
 
@@ -333,14 +317,10 @@ void MeterComponent::runSlider()
 {
     if (sliderState == SliderState::Invis)
     {
-        sliderState = SliderState::Vis;
-        //DBG("Vis");
-        //run the countdown timer.
+        sliderState = SliderState::Vis; //visible
         
         Timer::startTimerHz (1);
         addAndMakeVisible (&indicatorSlider);
-        
-       
         
     }
 }
@@ -359,10 +339,7 @@ void MeterComponent::timerCallback()
     //DBG(  indicatorSlider.getMaximum () ) ;
 }
 
-void MeterComponent::testFunction()
-{
-    //DBG("Test Function");
-}
+
 
 void MeterComponent::buttonClicked (Button* inButton)
 {
