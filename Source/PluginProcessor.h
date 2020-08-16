@@ -74,9 +74,9 @@ public:
     
     double getTimeGrab();
     
-    AudioProcessorValueTreeState& getAPVTS() {return mAPVTS;};
     
-    void testButton();
+    
+    void runStateChanged();
     
     
                        
@@ -128,9 +128,9 @@ private:
     
     //=============================
     
-    AudioProcessorValueTreeState mAPVTS;
     
-    AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BpmometerAudioProcessor)
 };

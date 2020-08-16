@@ -28,6 +28,8 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     
     indicatorSlider.setSliderStyle (Slider::SliderStyle::Rotary);
     
+    //turn off mouse response
+    indicatorSlider.setInterceptsMouseClicks (false, false);
     
 altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     
@@ -208,18 +210,18 @@ void MeterComponent::resized()
         indicatorSlider.setBounds(bounds.removeFromBottom(1000));
     
     
-//    auto bounds2 = getLocalBounds();
-//
-//    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
-//
-//    flexbox.items.add (FlexItem(200,75, launchLaterButton) );
-//    flexbox.items.add (FlexItem(200,75, launchNowButton) );
-//
-//    flexbox.performLayout(bounds2.removeFromBottom(200) );
+    auto bounds2 = getLocalBounds();
 
-    launchLaterButton.setBounds (50,100,150,75);
+    FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
+
+    flexbox.items.add (FlexItem(200,75, launchLaterButton) );
+    flexbox.items.add (FlexItem(200,75, launchNowButton) );
+
+    flexbox.performLayout(bounds2.removeFromBottom(350) );
+
+    //launchLaterButton.setBounds (50,100,150,75);
     
-    launchNowButton.setBounds (getWidth()-200, 100, 150,75);
+    //launchNowButton.setBounds (getWidth()-200, 100, 150,75);
 
     
     

@@ -28,7 +28,9 @@ public:
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                       const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider) override
     {
-        auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
+//        auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
+        
+        auto outline = Colours::lightgrey;
         //auto fill    = slider.findColour (Slider::rotarySliderFillColourId);
         
         auto fill = Colours::lightgrey;
@@ -51,7 +53,7 @@ public:
                                      true);
         
         g.setColour (outline);
-        g.strokePath (backgroundArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::rounded));
+        g.strokePath (backgroundArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::square));
         
         if (slider.isEnabled())
         {
