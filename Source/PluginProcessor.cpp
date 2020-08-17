@@ -102,12 +102,8 @@ void BpmometerAudioProcessor::changeProgramName (int index, const String& newNam
 //==============================================================================
 void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-    beatCount = 0;
     
-    //Samples per block can be changed in the settings at runtime.;;p
-//    tempBuffer.setSize(1, samplesPerBlock);
+    beatCount = 0;
     
     frameCount = 0;
     
@@ -115,8 +111,6 @@ void BpmometerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     chunkSize = samplesPerBlock / division;
     //this gives us 128sample chunks, assuming bufferSize is 512.
-    
-    //myHop = chunkSize / 2; //hop size 64
     
     tempBuffer.setSize(1, chunkSize);// 512
     
@@ -161,17 +155,9 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
     const auto numSamples = buffer.getNumSamples();
     
-    //        buffer.clear (i, 0, buffer.getNumSamples());
-    
-    //====================
-    
-    // 1. Clear tempbuffer
-    
     tempBuffer.clear();
     
     runBeatTracker( buffer );
-    
-    
     
 }
 
@@ -182,19 +168,19 @@ void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
     if (runState == RunState::Running)
     {
         
-        for (int i = 0; i < division; ++i) // [1]
+        for (int i = 0; i < division; ++i) // [1] An outer loop is created, with iterations corresponding to the division of the audio buffer (e.g., to split the buffer into equal 128 length chunks, the division would be 4 (assuming buffer size is 512) ).
         {
         
-            auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2]
+            auto* buffReader = buffer.getReadPointer (0, (i * chunkSize) ); // [2] Inside the outer loop, get a read pointer, “buffReader” into the audio buffer, and advance the start sample of the read pointer by the chunkSize on each iteration (the chunkSize is the audio buffer size divided by the division, e.g. 512 / 4 = 128).
         
-            auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3]
+            auto* tempBuffWriter = tempBuffer.getWritePointer (0, 0); // [3] Get a write pointer, “tempBuffWriter”, to prepare to write into the temporary buffer. This always starts at zero, as the temporary buffer is the same length as the chunkSize, so gets overwritten at each iteration, subsequent to processing.
         
             for (int samp = 0; samp < chunkSize; ++samp)
             {
-                tempBuffWriter[samp] = buffReader[samp]; // [4]
+                tempBuffWriter[samp] = buffReader[samp]; // [4] In a nested loop, the samples within the chunk of audio are iterated, and their data copied from the audio buffer to the temporary buffer.
             }
         
-            tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5]
+            tracker.processAudioFrame (tempBuffer.getWritePointer (0,0) ); // [5] Having exited the inner loop, but still in the outer loop, the temporary buffer is processed by the beat tracker. Since this is still inside the outer loop, this will happen multiple times per audio buffer (in this case, four).
         
             
             if (tracker.beatDueInCurrentFrame() == true)
@@ -203,11 +189,13 @@ void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
                 
                 updateBeatTime (tracker.getBeatTimeInSeconds (frameCount,
                                                               myHop,
-                                                              sr) ); // [6]
+                                                              sr) ); // [6] A BTrack function is called to check if a beat is due in the current frame. If it is, the beat time is reported by the BTrack, and this value is used elsewhere to calculate the tempo.
                 
                 
             }
-            frameCount ++; // [7]
+            frameCount ++; // [7] The frameCount is advanced – this value is used as an argument for the BTrack’s “getBeatTimeInSeconds()” function in the previous step, so it must be updated after each audio frame is processed.
+            
+
         }
         
     } //end of if statement
@@ -215,9 +203,7 @@ void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
 
 void BpmometerAudioProcessor::updateBeatTime(double _value)
 {
-    //This called in processBlock, getsBeatTimein Seconds and returns it here.
     timeGrab = _value;
-    //DBG( timeGrab );
 }
 
 
@@ -254,15 +240,11 @@ void BpmometerAudioProcessor::setStateInformation (const void* data, int sizeInB
 
 void BpmometerAudioProcessor::runStateChanged()
 {
-    //onOff = mAPVTS.getRawParameterValue(LAUNCH_LATER_ID)->load();
-    DBG ("button pressed");
     if (runState == RunState::Stopped)
     {
         runState = RunState::Running;
     }
 }
-
-
 
 //==============================================================================
 // This creates new instances of the plugin..

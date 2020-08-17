@@ -39,14 +39,6 @@ public:
 
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
     
-    
-    void calculateTempo ();
-    
-    // Getter function
-    float getTheTempo() {
-        return theTempo;
-    }
-
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
@@ -70,66 +62,62 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    /** Run the beat-tracking code
+     * @param buffer takes a reference to the audio buffer
+     */
     void runBeatTracker(AudioBuffer<float>& buffer);
     
+    /** Returns the timeGrab private member variable */
     double getTimeGrab();
     
-    
-    
+    /** Changes the RunState enum */
     void runStateChanged();
     
-    
-                       
 private:
     
-    //void calculateInterval (long frame);
-    
+    /**  How many equal parts into which to split the audio buffer */
     int division;
     
+    /** The size of each sub-section of the audio buffer (dependent on the division variable) */
     int chunkSize;
     
+    /** To keep track of how many beats have occurred */
     int beatCount;
     
+    /** The hop size for initialising the BTrack object */
     int myHop = 32;
     
-    //int trackBufferSize = myHop * 2;
-    
+    /** The sample rate */
     int sr = 44100;
     
+    /** Required for BTrack's getBeatTimeInSeconds() function */
     long frameCount;
     
-    //float previousBeatTime;
-    
-    float beatInterval;
-    
-    float theTempo;
-    
+    /** Expresses the time that a beat occurs */
     double timeGrab;
     
-    void updateBeatTime(double _value);
+    /** Update the timeGrab value
+     * @param _value the value with which to update the timeGrab
+     */
+     void updateBeatTime(double _value);
     
+    /** BTrack instance */
     BTrack tracker { myHop, 128 };
     
+    /** Temprary buffer for copying the audio buffer */
     AudioBuffer<double> tempBuffer;
     
-    //RunState enum for the beat tracker:
-    
-    // RunState instance:
-     //default is stopped
-    
+    /** Toggles whethere the BTrack is running or stopped */
     enum class RunState
     {
         Running,
         Stopped
     };
     
+    /** Runstate instance */
     RunState runState;
     
-    
     //=============================
-    
-    
-    
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BpmometerAudioProcessor)

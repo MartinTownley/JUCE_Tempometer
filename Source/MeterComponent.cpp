@@ -16,8 +16,6 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
 
 {
     
-    //indicatorString = " ";
-    
     indicatorSlider.setLookAndFeel (&altLookAndFeel);
     
     indicatorSlider.setRotaryParameters (degreesToRadians(315.0), degreesToRadians(405.0), false );
@@ -31,7 +29,7 @@ MeterComponent::MeterComponent(BpmometerAudioProcessor& p) : processor(p)
     //turn off mouse response
     indicatorSlider.setInterceptsMouseClicks (false, false);
     
-altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
+    altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     
     //======
     
@@ -40,6 +38,7 @@ altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     beatInterval = 0;
     
     rampLength = 0.3;
+    
     refreshRate = 60;
     
     smoothTempo.reset(refreshRate, rampLength); //same callbackTimer rate.
@@ -49,9 +48,6 @@ altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     //====================
     //-----launch buttons
     
-    
-    
-    //----------
     launchLaterButton.setColour(TextButton::buttonColourId, Colours::grey);
     launchLaterButton.setColour(TextButton::textColourOffId, Colours::white);
     
@@ -64,9 +60,10 @@ altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
     launchNowButton.setToggleState(false, NotificationType::dontSendNotification);
     
     
-    buttonDelaySecs = 5;
+    buttonDelaySecs = 10;
     
-    //LaunchLater Button has a delay
+    //-------
+    //Set button callbacks:
     
     launchLaterButton.onClick = [this]() {
         
@@ -77,16 +74,12 @@ altLookAndFeel.setEllipseColour( juce::Colours::mediumpurple );
             this->initialiseSlider();
             
             this->runSlider();
-            
-            
         } );
         
     };
     
     launchNowButton.onClick = [this]() {
-        DBG ("nowNow");
         
-        //processor.testButton();
         this->initialiseSlider();
         this->runSlider();
         
@@ -209,7 +202,6 @@ void MeterComponent::resized()
     if (sliderBool)
         indicatorSlider.setBounds(bounds.removeFromBottom(1000));
     
-    
     auto bounds2 = getLocalBounds();
 
     FlexBox flexbox { FlexBox::Direction::row, FlexBox::Wrap::noWrap, FlexBox::AlignContent::center, FlexBox::AlignItems::center, FlexBox::JustifyContent::center};
@@ -218,16 +210,6 @@ void MeterComponent::resized()
     flexbox.items.add (FlexItem(200,75, launchNowButton) );
 
     flexbox.performLayout(bounds2.removeFromBottom(350) );
-
-    //launchLaterButton.setBounds (50,100,150,75);
-    
-    //launchNowButton.setBounds (getWidth()-200, 100, 150,75);
-
-    
-    
-    
-    //============
-    
 
 }
 
@@ -242,32 +224,28 @@ void MeterComponent::tempoChanged()
     if(currentBeatTime != previousBeatTime)
     {
         
-        //DBG(currentBeatTime - previousBeatTime);
-        //DBG("Slider: "<< indicatorSlider.getValue() );
         // Calculate beat interval based on current and previous beat times:
         beatInterval = (currentBeatTime - previousBeatTime);
         
         // Calculate tempo based on interval:
-        
         float tempoFloat = 60.0f / beatInterval;
         
-        //DBG("TempoFloat: " << tempoFloat);
-
         // Round to integer:
         tempoInt = roundToInt(tempoFloat);
         
         
-        
+        // Get the difference between the current and previous slider values
         auto difference = abs (tempoInt - indicatorSlider.getValue() );
         
+        // Multiply the rampLength by the difference, so that the slider always moves at the same speed and does not animate eratically
         smoothTempo.reset (refreshRate, rampLength * difference );
 
-        // Smooth the value:
+        // Smooth the tempo value:
         smoothTempo.setTargetValue ( tempoInt );
         
-       //DBG( indicatorSlider.getMinimum() );
         
-        if (tempoInt < indicatorSlider.getMinimum()
+        // Colour the indicator red if it goes out of range:
+       if (tempoInt < indicatorSlider.getMinimum()
             || tempoInt > indicatorSlider.getMaximum() )
         {
             altLookAndFeel.setEllipseColour(juce::Colours::red);
@@ -277,13 +255,16 @@ void MeterComponent::tempoChanged()
         
     }
     
+    // Get the next smoothed tempo value:
     auto _theTempo =  smoothTempo.getNextValue() ;
     
+    // Set indicator slider to the smoothed value:
     indicatorSlider.setValue( _theTempo );
-    //DBG( "smoothed: " << smoothed );
     
+    // Set indicator string:
     setIndicatorString( _theTempo );
     
+    // Update the previous beat time:
     previousBeatTime = currentBeatTime;
     
     repaint();
@@ -294,13 +275,12 @@ void MeterComponent::tempoChanged()
 
 void MeterComponent::setSliderRange(int _intentionBPM)
 {
-    
+    //Target 12 o'clock value:
     intentionBPM = _intentionBPM;
     
-    //centralString = std::to_string ( centralBPM );
+    //std::string question = "?";
     
-    std::string question = "?";
-    
+    // Defining the range of the slider indicator:
     int lowerLimit = intentionBPM - 5;
     
     int upperLimit = intentionBPM + 5;
@@ -317,8 +297,6 @@ void MeterComponent::setIntentionBPMString(int _value)
 
 void MeterComponent::setIndicatorString(float value)
 {
-    
-    
     //======== slider value string=======
     indicatorString = std::to_string (roundToInt ( value ) );
     
@@ -344,20 +322,12 @@ void MeterComponent::initialiseSlider()
 
 void MeterComponent::timerCallback()
 {
-    //DBG ("countup : " << Timer::getTimerInterval() );
-    //countdownTime --;
-    //DBG(countdownTime);
-    //DBG(  indicatorSlider.getMaximum () ) ;
+    
 }
-
-
 
 void MeterComponent::buttonClicked (Button* inButton)
 {
-    if (inButton == &launchLaterButton)
-    {
-        //processor.testButton();
-    }
+    // Callback happens in lambda inside the constructor
 }
 
 

@@ -28,10 +28,9 @@ public:
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                       const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider) override
     {
-//        auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
-        
+
         auto outline = Colours::lightgrey;
-        //auto fill    = slider.findColour (Slider::rotarySliderFillColourId);
+       
         
         auto fill = Colours::lightgrey;
         
@@ -86,7 +85,7 @@ public:
     {
         
         ellipseColour = colour;
-        //DBG("ding ding");
+        
     }
 private:
     Colour ellipseColour;
@@ -138,6 +137,7 @@ public:
     /** Makes the slider visible */
     void runSlider();
     
+    /** Initialises the slider by setting  its range and target value */
     void initialiseSlider();
     
     void timerCallback() override;
@@ -147,40 +147,44 @@ public:
 
 private:
     
-    const Colour customBrown {0xff523f43};
-   
+    /** For creating custom slider */
     AltLookAndFeel altLookAndFeel;
     
     Slider indicatorSlider;
     
+    /** For comparing beat times */
     double previousBeatTime;
     
+    /** The time between beats */
     double beatInterval;
     
-    //float smoothNext;
-    
+    /** Smoothed version of the BPM value, so that the slider animates smoothly */
     SmoothedValue<float> smoothTempo;
-                
-    //float _theTempo; //the value displayed and given to the slider.
     
-    int intentionBPM; // this is the 12 o'clock BPM.
+    /** The central target BPM value */
+    int intentionBPM;
     
+    /** How often the component refreshes */
     int refreshRate;
     
+    /** The time it takes for the smoothed value to ramp between its previous and current value */
     float rampLength;
     
-    int bpmRange; //range for the slider, +/- the target.
+    /** The range for the slider, +/- the target value */
+    int bpmRange;
     
+    /** Integer version of the BPM value */
     int tempoInt;
-    //====== Buttons
     
+    //====== Buttons
+    /** Button for running beat-tracker. Also has a delayed callback which initialises the slider */
     TextButton launchLaterButton {"Run Tempo-Tracker and Set Target BPM"};
     
+    /** Resets the target BPM value */
     TextButton launchNowButton { "Reset Target to Current BPM" };
     
+    /** The delay time for the launchLaterButton callback */
     int buttonDelaySecs;
-    
-    
     
     //-------- Button enum
     
@@ -193,15 +197,15 @@ private:
     
     SliderState sliderState { SliderState::Invis }; //default
     
-    
+    //========
+    /** Flips to make the slider appear */
+    bool sliderBool;
     
     //========
-    
-    bool sliderBool; //flips to make the slider appear.
-    
-    //========
+    /** String version of the target BPM value */
     std::string intentionString;
     
+    /** String version of the current BPM value */
     std::string indicatorString;
     
 
