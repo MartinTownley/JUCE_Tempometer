@@ -114,8 +114,7 @@ void BTrack::initialise (int hopSize_, int frameSize_)
 	
 	beatDueInFrame = false;
 	
-
-	// create rayleigh weighting vector
+    // create rayleigh weighting vector
 	for (int n = 0; n < 128; n++)
 	{
 		weightingVector[n] = ((double) n / pow(rayparam,2)) * exp((-1*pow((double)-n,2)) / (2*pow(rayparam,2)));

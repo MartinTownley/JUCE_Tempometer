@@ -108,14 +108,10 @@ void MeterComponent::paint (Graphics& g)
     
     //======== slider
     
-    
     auto area = getLocalBounds();
     
     auto radius =  540;
     auto halfRad = radius/2;
-    
-    auto centrePoint = juce::Point<float> (getWidth()/2, getHeight()/2);
-    
     
    indicatorSlider.setCentrePosition(getWidth()/2, 3* getHeight()/4);
     
@@ -125,15 +121,7 @@ void MeterComponent::paint (Graphics& g)
     
     const auto division = 10;
     
-    const auto sixteenth = float_Pi / 8;
-    
-    const auto thirty2nd = float_Pi / 16;
-    
-    const auto fortyFive = float_Pi / 4;
-    
     const auto ninety = float_Pi / 2;
-    
-    const auto oneEighty = float_Pi;
     
     const auto rotation = ninety / division;
     
@@ -142,7 +130,6 @@ void MeterComponent::paint (Graphics& g)
     const auto centre = area.getCentre().toFloat(); //get centre
     
     auto threeQuart = juce::Point<float> (getWidth()/2, 3*getHeight()/4);
-    
     
     const auto markerLength = 20; //length of the notches
     
@@ -165,22 +152,14 @@ void MeterComponent::paint (Graphics& g)
     
     g.restoreState();
     
-    
     //========== indicator string
     g.setColour (Colours::white);
     g.setFont (40.0f);
     
-    
-    //g.drawText("Hello", 200, 100, 50, 50, Justification::centred);
-    
-    
     g.drawFittedText (indicatorString, getLocalBounds(), Justification::centred, 1);
-    
     
     //============== INTENTION STRING ==============
     g.setFont (30.0f);
-    
-    
     
     g.drawFittedText (intentionString,
                      getWidth()/2 - 25,
@@ -189,10 +168,6 @@ void MeterComponent::paint (Graphics& g)
                      50,
                      Justification::centred,
                      1);
-    
-  
-    
-    
     
 }
 

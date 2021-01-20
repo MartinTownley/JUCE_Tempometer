@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="htG75V" name="BPMOmeter" projectType="audioplug" jucerVersion="5.4.7"
-              defines="USE_KISS_FFT">
+<JUCERPROJECT id="htG75V" name="BPMOmeter" projectType="audioplug" defines="USE_KISS_FFT"
+              displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="cSPnam" name="BPMOmeter">
     <GROUP id="{5CBD5090-27A2-296D-4841-AC80F5F7A2BF}" name="Source">
       <GROUP id="{50ED461A-5B7E-ADB8-413C-1304AD191BB7}" name="kiss_fft130">

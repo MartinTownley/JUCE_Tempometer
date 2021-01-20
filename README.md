@@ -1,5 +1,5 @@
-# BSc Music Computing Final Year Project
-Final year project: Beat-detecting Reverse Metronome application (JUCE)
+
+# Tempometer Plugin: Beat-detecting Reverse Metronome application (JUCE)
 
 ## Build / Download Instructions
 ### Build

@@ -150,10 +150,6 @@ bool BpmometerAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-    
-    const auto numSamples = buffer.getNumSamples();
     
     tempBuffer.clear();
     
@@ -161,7 +157,7 @@ void BpmometerAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
 }
 
-void BpmometerAudioProcessor::runBeatTracker(AudioBuffer<float>& buffer)
+void BpmometerAudioProcessor::runBeatTracker (AudioBuffer<float>& buffer)
 {
    
     
